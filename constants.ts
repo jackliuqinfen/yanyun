@@ -106,7 +106,7 @@ export const INITIAL_USERS: User[] = [
     username: 'admin',
     name: '系统管理员',
     roleId: 'role_admin',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop',
+    avatar: '/image/other/img_1767022676982_photo-1472099645785-5658abf4ff4e.jpg',
     lastLogin: '2023-12-01 09:00',
     mfaEnabled: false,
     email: 'admin@yanyun.com',
@@ -130,9 +130,9 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   textLogoUrl: '/image/logo/wenzi.png', 
   faviconUrl: '/image/logo/tuxing.png', 
   themeColor: '#2C388B',
-  contactPhone: '0515-88888888',
-  contactEmail: 'office@jsyanyun.com',
-  contactAddress: '江苏省盐城市盐都区世纪大道99号金融城5号楼12F',
+  contactPhone: '0515-88818606',
+  contactEmail: 'yysjzx@vip.163.com',
+  contactAddress: '江苏省盐城市盐南高新区凤凰金宝广场4号楼608室',
   copyrightText: '© 2025 江苏盐韵工程项目管理有限公司 版权所有 苏ICP备12345678号',
   enableAnniversary: true, 
   anniversaryTitle: '盐韵八载 · 匠心传诚',
@@ -298,16 +298,16 @@ export const INITIAL_PAGE_CONTENT: PageContent = {
   ],
   headers: {
     // 使用在线 Unsplash 图片替换本地 Banner
-    about: { title: '品牌溯源', subtitle: '深耕工程管理八载，致力于成为卓越的资产全生命周期守护者', backgroundImage: 'https://youke2.picui.cn/s1/2025/12/26/694ea19144c6f.jpg' },
-    services: { title: '核心业务', subtitle: '全过程工程咨询服务，以数字化技术赋能传统工程管理模式', backgroundImage: 'https://images.unsplash.com/photo-1581094794329-cd1096a7a2e8?q=80&w=2070&auto=format&fit=crop' },
-    cases: { title: '经典案例', subtitle: '每一个精品工程，都是我们对“质量生命线”的庄严承诺', backgroundImage: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=2070&auto=format&fit=crop' },
-    news: { title: '行业动态', subtitle: '把握行业脉搏，传递盐韵声音', backgroundImage: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070&auto=format&fit=crop' },
-    branches: { title: '服务网络', subtitle: '立足江苏，辐射长三角，构建全方位的即时响应体系', backgroundImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop' },
-    contact: { title: '联系我们', subtitle: '期待与您携手，共创价值。咨询热线：0515-88888888', backgroundImage: 'https://images.unsplash.com/photo-1423666639041-f140481d836a?q=80&w=2074&auto=format&fit=crop' },
-    navigation: { title: '行业导航', subtitle: '为您整合行业政策及招投标入口', backgroundImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop' },
-    honors: { title: '资质荣誉', subtitle: '权威认证是对专业主义的最佳背书', backgroundImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1974&auto=format&fit=crop' },
-    tenders: { title: '招采频道', subtitle: '发布项目实时招标与中标讯息', backgroundImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop' },
-    performances: { title: '企业业绩', subtitle: '用数据说话，见证每一次交付的承诺', backgroundImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop' }
+    about: { title: '品牌溯源', subtitle: '深耕工程管理八载，致力于成为卓越的资产全生命周期守护者', backgroundImage: '/image/other/img_1767022705983_photo-1497215728101-856f4ea42174.jpg' },
+    services: { title: '核心业务', subtitle: '全过程工程咨询服务，以数字化技术赋能传统工程管理模式', backgroundImage: '/image/other/img_1767022686557_photo-1519389950473-47ba0277781c.jpg' },
+    cases: { title: '经典案例', subtitle: '每一个精品工程，都是我们对“质量生命线”的庄严承诺', backgroundImage: '/image/other/img_1767022684502_photo-1487958449943-2429e8be8625.jpg' },
+    news: { title: '行业动态', subtitle: '把握行业脉搏，传递盐韵声音', backgroundImage: '/image/other/img_1767022685949_photo-1504711434969-e33886168f5c.jpg' },
+    branches: { title: '服务网络', subtitle: '立足江苏，辐射长三角，构建全方位的即时响应体系', backgroundImage: '/image/other/img_1767022686557_photo-1519389950473-47ba0277781c.jpg' },
+    contact: { title: '联系我们', subtitle: '期待与您携手，共创价值。咨询热线：0515-88818606', backgroundImage: '/image/other/img_1767022704477_photo-1454165804606-c3d57bc86b40.jpg' },
+    navigation: { title: '行业导航', subtitle: '为您整合行业政策及招投标入口', backgroundImage: '/image/other/img_1767022702328_photo-1451187580459-43490279c0fa.jpg' },
+    honors: { title: '资质荣誉', subtitle: '权威认证是对专业主义的最佳背书', backgroundImage: '/image/other/img_1767022704049_photo-1557804506-669a67965ba0.jpg' },
+    tenders: { title: '招采频道', subtitle: '发布项目实时招标与中标讯息', backgroundImage: '/image/other/img_1767022704477_photo-1454165804606-c3d57bc86b40.jpg' },
+    performances: { title: '企业业绩', subtitle: '用数据说话，见证每一次交付的承诺', backgroundImage: '/image/other/img_1767022704891_photo-1460925895917-afdab827c52f.jpg' }
   },
   home: {
     layout: [
@@ -320,12 +320,12 @@ export const INITIAL_PAGE_CONTENT: PageContent = {
       { id: 'partners', type: 'partners', label: '合作伙伴', isVisible: true, order: 7 },
     ],
     hero: {
-      badge: 'Smart Construction Management Expert',
+      badge: '智慧工程管理专家',
       titleLine1: '数智化赋能',
       titleHighlight: '工程全生命周期管理',
       description: '江苏盐韵致力于打造“咨询+科技+运营”三位一体的工程管理新范式，为基建项目提供全闭环顾问服务。',
       // Hero Image
-      bgImage: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop',
+      bgImage: '/image/other/img_1767022705446_photo-1541888946425-d81bb19240f5.jpg',
       buttonText: '探索服务体系',
       buttonLink: '/services',
       secondaryButtonText: '查看业绩库',
@@ -358,7 +358,7 @@ export const INITIAL_PAGE_CONTENT: PageContent = {
       title: '不仅仅是监理，更是您的资产管家',
       content1: '江苏盐韵工程项目管理有限公司成立于2017年，是江苏省内成长速度最快的综合型工程咨询服务商之一。',
       content2: '我们不满足于传统的“三控三管一协调”，更在全行业率先推广“数智化工地”模型，为业主的每一分投资护航。',
-      imageUrl: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop'
+      imageUrl: '/image/other/img_1767022705983_photo-1497215728101-856f4ea42174.jpg'
     },
     culture: { mission: '为客户创造价值', values: '诚信、专业、创新', management: '基于客观数据的精准决策' }
   },
@@ -394,12 +394,12 @@ export const INITIAL_NEWS: NewsItem[] = [
     date: '2025-01-20', 
     category: '公司新闻', 
     published: true, 
-    imageUrl: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070&auto=format&fit=crop' 
+    imageUrl: '/image/other/img_1767022685949_photo-1504711434969-e33886168f5c.jpg' 
   }
 ];
 
 export const INITIAL_BRANCH_CATEGORIES: BranchCategory[] = [{ id: 'cat_hq', name: '总部及研发中心', order: 0 }];
-export const INITIAL_BRANCHES: Branch[] = [{ id: '1', name: '盐韵总部', address: '盐城市金融城5号楼12F', phone: '0515-88888888', manager: '张总经理', coordinates: { lat: 33.347, lng: 120.163 }, categoryId: 'cat_hq' }];
+export const INITIAL_BRANCHES: Branch[] = [{ id: '1', name: '盐韵总部', address: '江苏省盐城市盐南高新区凤凰金宝广场4号楼608室', phone: '0515-88818606', manager: '张总经理', coordinates: { lat: 33.347, lng: 120.163 }, categoryId: 'cat_hq' }];
 
 export const INITIAL_LINKS: NavigationLink[] = [
   // 一、政府监管平台
@@ -470,66 +470,66 @@ export const INITIAL_LINKS: NavigationLink[] = [
 // Use online logos for partners
 export const INITIAL_PARTNERS: Partner[] = [
   // 一、市级国有投资平台
-  { id: '101', name: '盐城城投集团', logoUrl: 'https://ui-avatars.com/api/?name=CT&background=random&size=128' },
-  { id: '102', name: '盐城国投集团', logoUrl: 'https://ui-avatars.com/api/?name=GT&background=random&size=128' },
-  { id: '103', name: '盐城交投集团', logoUrl: 'https://ui-avatars.com/api/?name=JT&background=random&size=128' },
-  { id: '104', name: '盐城城镇化集团', logoUrl: 'https://ui-avatars.com/api/?name=CZ&background=random&size=128' },
-  { id: '105', name: '盐城海兴集团', logoUrl: 'https://ui-avatars.com/api/?name=HX&background=random&size=128' },
-  { id: '106', name: '悦达集团', logoUrl: 'https://ui-avatars.com/api/?name=YD&background=random&size=128' },
-  { id: '107', name: '盐城东方集团', logoUrl: 'https://ui-avatars.com/api/?name=DF&background=random&size=128' },
-  { id: '108', name: '盐城世纪新城集团', logoUrl: 'https://ui-avatars.com/api/?name=SJ&background=random&size=128' },
-  { id: '109', name: '盐城高新区集团', logoUrl: 'https://ui-avatars.com/api/?name=GX&background=random&size=128' },
-  { id: '110', name: '盐城港集团', logoUrl: 'https://ui-avatars.com/api/?name=YG&background=random&size=128' },
+  { id: '101', name: '盐城城投集团', logoUrl: '/image/other/avatar_CT_dkfv6m.png' },
+  { id: '102', name: '盐城国投集团', logoUrl: '/image/other/avatar_GT_l3ygb.png' },
+  { id: '103', name: '盐城交投集团', logoUrl: '/image/other/avatar_JT_a4b0sd.png' },
+  { id: '104', name: '盐城城镇化集团', logoUrl: '/image/other/avatar_CZ_odl7x.png' },
+  { id: '105', name: '盐城海兴集团', logoUrl: '/image/other/avatar_HX_38mba.png' },
+  { id: '106', name: '悦达集团', logoUrl: '/image/other/avatar_YD_49s33n.png' },
+  { id: '107', name: '盐城东方集团', logoUrl: '/image/other/avatar_DF_nb677a.png' },
+  { id: '108', name: '盐城世纪新城集团', logoUrl: '/image/other/avatar_SJ_1rwkz.png' },
+  { id: '109', name: '盐城高新区集团', logoUrl: '/image/other/avatar_GX_rl4e9x.png' },
+  { id: '110', name: '盐城港集团', logoUrl: '/image/other/avatar_YG_3qnnyj.png' },
 
   // 二、县区级国有投资平台
-  { id: '201', name: '亭湖城投集团', logoUrl: 'https://ui-avatars.com/api/?name=TH&background=random&size=128' },
-  { id: '202', name: '盐都国资集团', logoUrl: 'https://ui-avatars.com/api/?name=YD&background=random&size=128' },
-  { id: '203', name: '射阳城投公司', logoUrl: 'https://ui-avatars.com/api/?name=SY&background=random&size=128' },
-  { id: '204', name: '阜宁投资集团', logoUrl: 'https://ui-avatars.com/api/?name=FN&background=random&size=128' },
-  { id: '205', name: '滨海灌江集团', logoUrl: 'https://ui-avatars.com/api/?name=BH&background=random&size=128' },
-  { id: '206', name: '响水灌江集团', logoUrl: 'https://ui-avatars.com/api/?name=XS&background=random&size=128' },
-  { id: '207', name: '大丰城投集团', logoUrl: 'https://ui-avatars.com/api/?name=DF&background=random&size=128' },
-  { id: '208', name: '大丰港开发集团', logoUrl: 'https://ui-avatars.com/api/?name=DG&background=random&size=128' },
-  { id: '209', name: '建湖城投集团', logoUrl: 'https://ui-avatars.com/api/?name=JH&background=random&size=128' },
-  { id: '210', name: '东台城投集团', logoUrl: 'https://ui-avatars.com/api/?name=DT&background=random&size=128' },
+  { id: '201', name: '亭湖城投集团', logoUrl: '/image/other/avatar_TH_9ugu1.png' },
+  { id: '202', name: '盐都国资集团', logoUrl: '/image/other/avatar_YD_49s33n.png' },
+  { id: '203', name: '射阳城投公司', logoUrl: '/image/other/avatar_SY_308ym.png' },
+  { id: '204', name: '阜宁投资集团', logoUrl: '/image/other/avatar_FN_6e8re.png' },
+  { id: '205', name: '滨海灌江集团', logoUrl: '/image/other/avatar_BH_p4msmo.png' },
+  { id: '206', name: '响水灌江集团', logoUrl: '/image/other/avatar_XS_jygroc.png' },
+  { id: '207', name: '大丰城投集团', logoUrl: '/image/other/avatar_DF_nb677a.png' },
+  { id: '208', name: '大丰港开发集团', logoUrl: '/image/other/avatar_DG_4epwp.png' },
+  { id: '209', name: '建湖城投集团', logoUrl: '/image/other/avatar_JH_88f7c.png' },
+  { id: '210', name: '东台城投集团', logoUrl: '/image/other/avatar_DT_y0b3ul.png' },
 
   // 三、专业领域投资主体
-  { id: '301', name: '盐城水务集团', logoUrl: 'https://ui-avatars.com/api/?name=SW&background=random&size=128' },
-  { id: '302', name: '盐城水利建设中心', logoUrl: 'https://ui-avatars.com/api/?name=SL&background=random&size=128' },
-  { id: '303', name: '盐城公路中心', logoUrl: 'https://ui-avatars.com/api/?name=GL&background=random&size=128' },
-  { id: '304', name: '盐城教育投资公司', logoUrl: 'https://ui-avatars.com/api/?name=JY&background=random&size=128' },
-  { id: '305', name: '盐城卫健委', logoUrl: 'https://ui-avatars.com/api/?name=WJ&background=random&size=128' },
-  { id: '306', name: '盐城资规局', logoUrl: 'https://ui-avatars.com/api/?name=ZG&background=random&size=128' },
-  { id: '307', name: '盐城海关', logoUrl: 'https://ui-avatars.com/api/?name=HG&background=random&size=128' },
-  { id: '308', name: '盐城机场', logoUrl: 'https://ui-avatars.com/api/?name=JC&background=random&size=128' },
-  { id: '309', name: '盐城邮政局', logoUrl: 'https://ui-avatars.com/api/?name=YZ&background=random&size=128' },
-  { id: '310', name: '盐城城北开投', logoUrl: 'https://ui-avatars.com/api/?name=CB&background=random&size=128' },
+  { id: '301', name: '盐城水务集团', logoUrl: '/image/other/avatar_SW_35fhr8.png' },
+  { id: '302', name: '盐城水利建设中心', logoUrl: '/image/other/avatar_SL_2rla7f.png' },
+  { id: '303', name: '盐城公路中心', logoUrl: '/image/other/avatar_GL_qzelt.png' },
+  { id: '304', name: '盐城教育投资公司', logoUrl: '/image/other/avatar_JY_8pjp7r.png' },
+  { id: '305', name: '盐城卫健委', logoUrl: '/image/other/avatar_WJ_hadiz.png' },
+  { id: '306', name: '盐城资规局', logoUrl: '/image/other/avatar_ZG_hl95it.png' },
+  { id: '307', name: '盐城海关', logoUrl: '/image/other/avatar_HG_5xz0i.png' },
+  { id: '308', name: '盐城机场', logoUrl: '/image/other/avatar_JC_smioz.png' },
+  { id: '309', name: '盐城邮政局', logoUrl: '/image/other/avatar_YZ_fz46jr.png' },
+  { id: '310', name: '盐城城北开投', logoUrl: '/image/other/avatar_CB_m89qwo.png' },
 
   // 四、央企及省属国企在盐分支机构
-  { id: '401', name: '华润置地盐城公司', logoUrl: 'https://ui-avatars.com/api/?name=HR&background=random&size=128' },
-  { id: '402', name: '中建一局盐城分公司', logoUrl: 'https://ui-avatars.com/api/?name=ZJ&background=random&size=128' },
-  { id: '403', name: '中交二航局盐城公司', logoUrl: 'https://ui-avatars.com/api/?name=ZJ&background=random&size=128' },
-  { id: '404', name: '中铁建工盐城分公司', logoUrl: 'https://ui-avatars.com/api/?name=ZT&background=random&size=128' },
-  { id: '405', name: '中冶华天盐城分公司', logoUrl: 'https://ui-avatars.com/api/?name=ZY&background=random&size=128' },
-  { id: '406', name: '中国十九冶盐城分公司', logoUrl: 'https://ui-avatars.com/api/?name=SY&background=random&size=128' },
-  { id: '407', name: '中电建核电盐城分公司', logoUrl: 'https://ui-avatars.com/api/?name=ZD&background=random&size=128' },
-  { id: '408', name: '中核华兴盐城分公司', logoUrl: 'https://ui-avatars.com/api/?name=ZH&background=random&size=128' },
-  { id: '409', name: '江苏鸿源盐城分公司', logoUrl: 'https://ui-avatars.com/api/?name=HY&background=random&size=128' },
-  { id: '410', name: '省交建局盐城指挥部', logoUrl: 'https://ui-avatars.com/api/?name=JJ&background=random&size=128' },
+  { id: '401', name: '华润置地盐城公司', logoUrl: '/image/other/avatar_HR_zmac7n.png' },
+  { id: '402', name: '中建一局盐城分公司', logoUrl: '/image/other/avatar_ZJ_2o5no8.png' },
+  { id: '403', name: '中交二航局盐城公司', logoUrl: '/image/other/avatar_ZJ_2o5no8.png' },
+  { id: '404', name: '中铁建工盐城分公司', logoUrl: '/image/other/avatar_ZT_s2takc.png' },
+  { id: '405', name: '中冶华天盐城分公司', logoUrl: '/image/other/avatar_ZY_w8y4y6.png' },
+  { id: '406', name: '中国十九冶盐城分公司', logoUrl: '/image/other/avatar_SY_308ym.png' },
+  { id: '407', name: '中电建核电盐城分公司', logoUrl: '/image/other/avatar_ZD_6c8y6v.png' },
+  { id: '408', name: '中核华兴盐城分公司', logoUrl: '/image/other/avatar_ZH_cs9sdm.png' },
+  { id: '409', name: '江苏鸿源盐城分公司', logoUrl: '/image/other/avatar_HY_epb3ba.png' },
+  { id: '410', name: '省交建局盐城指挥部', logoUrl: '/image/other/avatar_JJ_8fmq6a.png' },
 
   // 五、产业园区及功能区开发主体
-  { id: '501', name: '盐城经开区管委会', logoUrl: 'https://ui-avatars.com/api/?name=JK&background=random&size=128' },
-  { id: '502', name: '盐城盐南高新区管委会', logoUrl: 'https://ui-avatars.com/api/?name=YN&background=random&size=128' },
-  { id: '503', name: '盐城环保科技城管委会', logoUrl: 'https://ui-avatars.com/api/?name=HB&background=random&size=128' },
-  { id: '504', name: '盐城黄海新区管委会', logoUrl: 'https://ui-avatars.com/api/?name=HH&background=random&size=128' },
-  { id: '505', name: '常盐工业园管委会', logoUrl: 'https://ui-avatars.com/api/?name=CY&background=random&size=128' },
+  { id: '501', name: '盐城经开区管委会', logoUrl: '/image/other/avatar_JK_pi9go.png' },
+  { id: '502', name: '盐城盐南高新区管委会', logoUrl: '/image/other/avatar_YN_j9v4v6.png' },
+  { id: '503', name: '盐城环保科技城管委会', logoUrl: '/image/other/avatar_HB_e66e6m.png' },
+  { id: '504', name: '盐城黄海新区管委会', logoUrl: '/image/other/avatar_HH_nf402.png' },
+  { id: '505', name: '常盐工业园管委会', logoUrl: '/image/other/avatar_CY_jfee5r.png' },
 
   // 六、知名房地产开发企业
-  { id: '601', name: '宝龙地产盐城公司', logoUrl: 'https://ui-avatars.com/api/?name=BL&background=random&size=128' },
-  { id: '602', name: '绿地盐城公司', logoUrl: 'https://ui-avatars.com/api/?name=LD&background=random&size=128' },
-  { id: '603', name: '金地商置盐城公司', logoUrl: 'https://ui-avatars.com/api/?name=JD&background=random&size=128' },
-  { id: '604', name: '碧桂园盐城公司', logoUrl: 'https://ui-avatars.com/api/?name=BG&background=random&size=128' },
-  { id: '605', name: '江苏华兴集团', logoUrl: 'https://ui-avatars.com/api/?name=HX&background=random&size=128' }
+  { id: '601', name: '宝龙地产盐城公司', logoUrl: '/image/other/avatar_BL_y4i4el.png' },
+  { id: '602', name: '绿地盐城公司', logoUrl: '/image/other/avatar_LD_k1o3ge.png' },
+  { id: '603', name: '金地商置盐城公司', logoUrl: '/image/other/avatar_JD_2tvb8j.png' },
+  { id: '604', name: '碧桂园盐城公司', logoUrl: '/image/other/avatar_BG_fqvia.png' },
+  { id: '605', name: '江苏华兴集团', logoUrl: '/image/other/avatar_HX_38mba.png' }
 ];
 export const INITIAL_TESTIMONIALS: Testimonial[] = [];
 export const INITIAL_HONOR_CATEGORIES: HonorCategory[] = [
@@ -771,7 +771,7 @@ export const INITIAL_PROJECTS: ProjectCase[] = [
     title: '盐城大数据中心三期扩建项目', 
     category: '公共建筑', 
     description: '省重点基建工程，总投资超15亿元，应用 BIM+IoT 技术实现数智化移交。', 
-    imageUrl: 'https://images.unsplash.com/photo-1558494949-ef526bca4852?q=80&w=2068&auto=format&fit=crop', 
+    imageUrl: '/image/other/img_1767022854806_photo-1532153975070-2e9ab71f1b14.jpg', 
     location: '盐城市城南新区', 
     date: '2024-12', 
     isFeatured: true 
@@ -781,7 +781,7 @@ export const INITIAL_PROJECTS: ProjectCase[] = [
     title: '南通金融城超高层综合体监理', 
     category: '综合商业', 
     description: '200米级超高层建筑，包含复杂钢结构及深基坑作业，盐韵负责全过程监理。', 
-    imageUrl: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?q=80&w=2070&auto=format&fit=crop', 
+    imageUrl: '/image/other/img_1767022814316_photo-1486325212027-8081e485255e.jpg', 
     location: '南通市崇川区', 
     date: '2023-11', 
     isFeatured: true 
@@ -791,7 +791,7 @@ export const INITIAL_PROJECTS: ProjectCase[] = [
     title: '悦达起亚三工厂智能车间改造',
     category: '工业厂房',
     description: '涉及高精度设备基础施工与钢结构大跨度吊装，工期紧任务重。',
-    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop',
+    imageUrl: '/image/other/img_1767022819436_photo-1581091226825-a6a2a5aee158.jpg',
     location: '盐城经济开发区',
     date: '2023-08',
     isFeatured: true
@@ -801,7 +801,7 @@ export const INITIAL_PROJECTS: ProjectCase[] = [
     title: '盐城高铁站综合交通枢纽',
     category: '基础设施',
     description: '集高铁、长途客运、公交、出租于一体的城市交通核心，获鲁班奖提名。',
-    imageUrl: 'https://images.unsplash.com/photo-1532153975070-2e9ab71f1b14?q=80&w=2070&auto=format&fit=crop',
+    imageUrl: '/image/other/img_1767022854806_photo-1532153975070-2e9ab71f1b14.jpg',
     location: '盐城市亭湖区',
     date: '2022-05',
     isFeatured: true
@@ -811,7 +811,7 @@ export const INITIAL_PROJECTS: ProjectCase[] = [
     title: '中韩(盐城)产业园未来科技城',
     category: '公共建筑',
     description: '园区地标性建筑群，包含研发中心、展示中心及人才公寓，采用绿色建筑三星标准。',
-    imageUrl: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2069&auto=format&fit=crop',
+    imageUrl: '/image/other/img_1767022871814_photo-1497366754035-f200968a6e72.jpg',
     location: '盐城河东新区',
     date: '2023-01',
     isFeatured: true
@@ -821,7 +821,7 @@ export const INITIAL_PROJECTS: ProjectCase[] = [
     title: '大丰港深水航道整治工程',
     category: '基础设施',
     description: '省重点水运工程，监理团队克服海上作业恶劣环境，确保工程按期完工。',
-    imageUrl: 'https://images.unsplash.com/photo-1590247813693-5541d1c609fd?q=80&w=2009&auto=format&fit=crop',
+    imageUrl: '/image/other/img_1767022900601_photo-1590247813693-5541d1c609fd.jpg',
     location: '盐城市大丰区',
     date: '2021-12',
     isFeatured: true
@@ -831,7 +831,7 @@ export const INITIAL_PROJECTS: ProjectCase[] = [
     title: '射阳县人民医院异地新建项目',
     category: '公共建筑',
     description: '三级甲等综合医院标准建设，包含门诊楼、住院楼及感染楼，总建筑面积18万平米。',
-    imageUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop',
+    imageUrl: '/image/other/img_1767022912880_photo-1519494026892-80bbd2d6fd0d.jpg',
     location: '盐城市射阳县',
     date: '2024-02',
     isFeatured: true
@@ -846,6 +846,6 @@ export const COMPANY_HISTORY: HistoryEvent[] = [
 ];
 
 export const INITIAL_TEAM: TeamMember[] = [
-  { id: '1', name: '张伟', role: '总经理 / 国家注册监理工程师', description: '25年基建管理经验，曾主导多项省优、部优工程项目。', imageUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop' },
-  { id: '2', name: '李静', role: '技术总监 / 国家注册造价工程师', description: '精通全过程造价管控，主持过超过50个大型项目的预决算审计。', imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop' }
+  { id: '1', name: '张伟', role: '总经理 / 国家注册监理工程师', description: '25年基建管理经验，曾主导多项省优、部优工程项目。', imageUrl: '/image/other/img_1767022937022_photo-1560250097-0b93528c311a.jpg' },
+  { id: '2', name: '李静', role: '技术总监 / 国家注册造价工程师', description: '精通全过程造价管控，主持过超过50个大型项目的预决算审计。', imageUrl: '/image/other/img_1767022976069_photo-1573496359142-b8d87734a5a2.jpg' }
 ];

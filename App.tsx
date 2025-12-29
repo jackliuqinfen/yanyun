@@ -38,6 +38,7 @@ import NavigationManager from './pages/admin/NavigationManager';
 import PageManager from './pages/admin/PageManager';
 import TeamManager from './pages/admin/TeamManager';
 import HistoryManager from './pages/admin/HistoryManager';
+import DesignSystem from './pages/admin/DesignSystem';
 
 const App: React.FC = () => {
   return (
@@ -49,6 +50,7 @@ const App: React.FC = () => {
           <AdminLayout>
             <Routes>
               <Route path="dashboard" element={<Dashboard />} />
+              <Route path="design-system" element={<DesignSystem />} />
               <Route path="settings" element={<Settings />} />
               <Route path="security" element={<SecuritySettings />} />
               <Route path="pages" element={<PageManager />} />
