@@ -1,0 +1,379 @@
+{
+  "success": 23,
+  "failed": 27,
+  "logs": [
+    {
+      "id": "5",
+      "title": "江苏省建筑市场监管与诚信信息一体化平台",
+      "url": "http://49.77.204.6:17001/Website/#/",
+      "status": "success",
+      "localPath": "/image/favicons/49.77.204.6.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "2",
+      "title": "盐城市住房和城乡建设局",
+      "url": "http://zfhcxjsj.yancheng.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "1",
+      "title": "江苏省住房和城乡建设厅",
+      "url": "http://jsszfhcxjst.jiangsu.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "3",
+      "title": "江苏省公共资源交易网",
+      "url": "http://jsggzy.jszwfw.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "4",
+      "title": "盐城市公共资源交易中心",
+      "url": "https://ggzy.yancheng.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "7",
+      "title": "盐城市水利局",
+      "url": "http://slj.yancheng.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "6",
+      "title": "盐城市交通运输局",
+      "url": "https://ycjtj.yancheng.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "8",
+      "title": "盐城市自然资源和规划局",
+      "url": "http://zrzy.jiangsu.gov.cn/yc/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "9",
+      "title": "江苏省建设工程质量监督网",
+      "url": "http://www.jszljd.com",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "10",
+      "title": "江苏省建设工程安全监督网",
+      "url": "http://www.jscin.gov.cn/jsaj",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "14",
+      "title": "中国招标投标公共服务平台",
+      "url": "http://gjpt.ahtba.org.cn/",
+      "status": "success",
+      "localPath": "/image/favicons/gjpt.ahtba.org.cn.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "13",
+      "title": "盐城市建设工程招投标网",
+      "url": "https://ycggzy.jszwfw.gov.cn/gb-web/#/login",
+      "status": "success",
+      "localPath": "/image/favicons/ycggzy.jszwfw.gov.cn.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "12",
+      "title": "江苏政府采购网",
+      "url": "http://www.ccgp-jiangsu.gov.cn/",
+      "status": "success",
+      "localPath": "/image/favicons/www.ccgp-jiangsu.gov.cn.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "11",
+      "title": "江苏建设工程招标网",
+      "url": "http://www.jszb.com.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "15",
+      "title": "全国公共资源交易平台",
+      "url": "https://www.ggzy.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "16",
+      "title": "云筑网",
+      "url": "https://www.yzw.cn/",
+      "status": "success",
+      "localPath": "/image/favicons/www.yzw.cn.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "17",
+      "title": "筑材网",
+      "url": "https://www.zhucai.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.zhucai.com.png",
+      "strategy": "html"
+    },
+    {
+      "id": "19",
+      "title": "江苏省水利工程建设招标投标监督服务平台",
+      "url": "https://jswater.jiangsu.gov.cn/col/col80020/",
+      "status": "success",
+      "localPath": "/image/favicons/jswater.jiangsu.gov.cn.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "18",
+      "title": "中国通用招标网",
+      "url": "https://www.china-tender.com.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "20",
+      "title": "盐城市政府采购网",
+      "url": "http://zfcg.yancheng.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "22",
+      "title": "盐城市工程造价信息网",
+      "url": "https://www.costku.com/yancheng/",
+      "status": "success",
+      "localPath": "/image/favicons/www.costku.com.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "25",
+      "title": "盐城市建设工程材料价格信息平台",
+      "url": "https://www.costku.com/36001.html",
+      "status": "success",
+      "localPath": "/image/favicons/www.costku.com.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "23",
+      "title": "造价通(江苏站)",
+      "url": "http://js.zjtcn.com",
+      "status": "success",
+      "localPath": "/image/favicons/js.zjtcn.com.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "24",
+      "title": "江苏省工程材料价格信息平台",
+      "url": "https://jiangsu.gxzjxh.cn/",
+      "status": "success",
+      "localPath": "/image/favicons/jiangsu.gxzjxh.cn.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "21",
+      "title": "江苏省工程造价信息网",
+      "url": "http://www.jszj.com.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "29",
+      "title": "建标知网",
+      "url": "https://www.kscecs.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.kscecs.com.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "27",
+      "title": "江苏省水利工程造价管理网",
+      "url": "https://jswater.jiangsu.gov.cn/col/col80021/",
+      "status": "success",
+      "localPath": "/image/favicons/jswater.jiangsu.gov.cn.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "26",
+      "title": "江苏省交通工程定额站",
+      "url": "http://jtyst.jiangsu.gov.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "28",
+      "title": "江苏造价信息网(速得材价)",
+      "url": "https://www.jszjxh.com/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "30",
+      "title": "中国建筑标准设计研究院",
+      "url": "http://www.cbsd.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "32",
+      "title": "筑龙网",
+      "url": "https://www.zhulong.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.zhulong.com.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "31",
+      "title": "江苏省工程建设标准网",
+      "url": "https://pan.clooo.cn/%E8%B5%84%E6%96%99/000-%E8%A1%8C%E4%B8%9A%E8%A7%84%E8%8C%83%E5%9B%BE%E9%9B%86%E5%A4%A7%E5%85%A8/3-%E7%9C%81%E6%A0%87/13%E6%B1%9F%E8%8B%8F%E7%9C%81%E6%A0%87/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "33",
+      "title": "建库网",
+      "url": "https://www.jianku.com/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "34",
+      "title": "中国建筑技术网",
+      "url": "https://www.building.hc360.com/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "35",
+      "title": "中国BIM门户",
+      "url": "https://www.bimcn.org/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "36",
+      "title": "BIM建筑网",
+      "url": "https://www.bimii.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.bimii.com.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "39",
+      "title": "万间云-BIM数字建造平台",
+      "url": "https://www.vanjian.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.vanjian.com.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "38",
+      "title": "鲁班工程管理数字平台",
+      "url": "https://www.luban.com/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "37",
+      "title": "广联达BIM平台",
+      "url": "https://bim.glodon.com/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "40",
+      "title": "江苏建设人才网",
+      "url": "https://www.jsjsrc.com/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "45",
+      "title": "江苏省规划设计集团",
+      "url": "https://www.jspdg.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.jspdg.com.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "44",
+      "title": "江苏省工程咨询中心",
+      "url": "https://www.cnjecc.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.cnjecc.com.ico",
+      "strategy": "html"
+    },
+    {
+      "id": "43",
+      "title": "建筑英才网(江苏站)",
+      "url": "https://www.buildhr.com/jiangsu/",
+      "status": "success",
+      "localPath": "/image/favicons/www.buildhr.com.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "42",
+      "title": "江苏省人才服务云平台",
+      "url": "https://www.jssrcfwypt.org.cn/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "41",
+      "title": "盐城市建筑人才网",
+      "url": "https://www.ycjsrc.com/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    },
+    {
+      "id": "49",
+      "title": "江苏省工程档案资料管理系统",
+      "url": "http://www.jsgcda.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.jsgcda.com.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "47",
+      "title": "斗栱云工程管理系统",
+      "url": "https://www.dougongyun.com/",
+      "status": "success",
+      "localPath": "/image/favicons/www.dougongyun.com.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "50",
+      "title": "盐城市工程建设项目审批管理系统",
+      "url": "https://yc.jszwfw.gov.cn/col/col181563/index.html",
+      "status": "success",
+      "localPath": "/image/favicons/yc.jszwfw.gov.cn.ico",
+      "strategy": "root"
+    },
+    {
+      "id": "48",
+      "title": "筑云科技-BIMCC数字建造平台",
+      "url": "https://www.bimcc.net/",
+      "status": "success",
+      "localPath": "/image/favicons/www.bimcc.net.png",
+      "strategy": "html"
+    },
+    {
+      "id": "46",
+      "title": "乐建宝工程项目管理平台",
+      "url": "https://www.gcb365.com/",
+      "status": "failed",
+      "error": "This operation was aborted"
+    }
+  ]
+}
