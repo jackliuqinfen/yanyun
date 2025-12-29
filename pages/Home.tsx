@@ -171,10 +171,28 @@ const Home: React.FC = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight tracking-tight mb-8"
+                className="font-black text-white leading-tight tracking-tight mb-8"
              >
-                <span className="block mb-2 sm:mb-4">{homeContent.hero.titleLine1}</span>
-                <span className="relative inline-block py-1 md:py-2 pb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-accent italic drop-shadow-sm">
+                {/* 
+                  REQUIREMENT: Text must stay on a single line at all costs.
+                  SOLUTION: 
+                  1. whitespace-nowrap: Forces single line.
+                  2. clamp(20px, 5vw, 6rem): Dynamically scales font size based on viewport width (vw).
+                     - Minimum: 20px (readable)
+                     - Preferred: 5% of viewport width
+                     - Maximum: 6rem (desktop design size)
+                  3. w-fit: Ensures container only takes necessary width.
+                */}
+                <span className="block mb-2 sm:mb-4 whitespace-nowrap w-fit text-[clamp(20px,5vw,6rem)]">
+                   {homeContent.hero.titleLine1}
+                </span>
+                
+                {/* 
+                  REQUIREMENT: Text must stay on a single line.
+                  SOLUTION: Similar dynamic sizing with slightly smaller ratio to fit longer text.
+                  - clamp(16px, 4vw, 5rem) ensures it fits even on small mobile screens without wrapping.
+                */}
+                <span className="relative inline-block py-1 md:py-2 pb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-accent italic drop-shadow-sm whitespace-nowrap w-fit text-[clamp(16px,4vw,5rem)]">
                   {homeContent.hero.titleHighlight}
                 </span>
              </MotionH1>

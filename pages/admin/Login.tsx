@@ -14,7 +14,25 @@ const Login: React.FC = () => {
   const [step, setStep] = useState<'credentials' | 'mfa'>('credentials');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
   const navigate = useNavigate();
+
+  // Password Strength Calculator
+  const checkStrength = (pass: string) => {
+    let score = 0;
+    if (!pass) return 0;
+    if (pass.length > 8) score += 1;
+    if (/[A-Z]/.test(pass)) score += 1;
+    if (/[0-9]/.test(pass)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pass)) score += 1;
+    return score;
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setPassword(val);
+    setPasswordStrength(checkStrength(val));
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,11 +148,34 @@ const Login: React.FC = () => {
                             type="password" 
                             required
                             value={password}
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={handlePasswordChange}
                             className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all outline-none font-medium" 
                             placeholder="••••••••"
                           />
                        </div>
+                       {/* Password Strength Meter */}
+                       {password.length > 0 && (
+                          <div className="flex gap-1 mt-2 px-1">
+                             {[...Array(4)].map((_, i) => (
+                                <div 
+                                   key={i} 
+                                   className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                                      i < passwordStrength 
+                                         ? (passwordStrength < 2 ? 'bg-red-400' : passwordStrength < 3 ? 'bg-yellow-400' : 'bg-emerald-400') 
+                                         : 'bg-gray-100'
+                                   }`}
+                                ></div>
+                             ))}
+                          </div>
+                       )}
+                    </div>
+
+                    <div className="flex items-center justify-between px-1">
+                       <label className="flex items-center space-x-2 cursor-pointer">
+                          <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary/20" />
+                          <span className="text-xs text-gray-500 font-medium">记住我</span>
+                       </label>
+                       <button type="button" className="text-xs text-primary font-bold hover:underline" onClick={() => alert('请联系系统管理员重置密码')}>忘记密码？</button>
                     </div>
 
                     <button 

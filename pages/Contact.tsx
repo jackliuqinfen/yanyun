@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, MessageSquare } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, MessageSquare, ShieldCheck } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { storageService } from '../services/storageService';
 
@@ -93,117 +93,129 @@ const Contact: React.FC = () => {
                  className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-500"
                />
                <a 
-                 href="https://maps.google.com" 
+                 href="https://ditu.amap.com/" 
                  target="_blank" 
                  rel="noreferrer"
                  className="bg-white px-4 py-2 rounded-full shadow-lg relative z-10 text-sm font-bold text-primary hover:scale-105 transition-transform flex items-center"
                >
-                 <MapPin size={16} className="mr-2" /> 打开地图导航
+                 <MapPin size={16} className="mr-2" /> 打开高德地图导航
                </a>
             </div>
           </div>
 
-          {/* Contact Form Side */}
-          <div className="bg-white p-10 rounded-2xl border border-gray-200 shadow-xl shadow-gray-200/50 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-8 -mt-8"></div>
+          {/* Contact Form Side - Redesigned */}
+          <div className="bg-white p-8 md:p-10 rounded-2xl border border-gray-200 shadow-2xl shadow-gray-200/50 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full -mr-10 -mt-10 pointer-events-none"></div>
             
-            <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center">
-               <MessageSquare className="mr-2 text-primary" /> 在线留言
-            </h2>
-            <p className="text-gray-500 mb-8 text-sm">请填写以下信息，我们的工程专家将尽快为您提供专业解答。</p>
-            
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">姓名 <span className="text-red-500">*</span></label>
-                  <input 
-                     type="text" 
-                     name="name"
-                     required
-                     value={formState.name}
-                     onChange={handleChange}
-                     className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all" 
-                     placeholder="您的姓名" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">电话 <span className="text-red-500">*</span></label>
-                  <input 
-                     type="tel" 
-                     name="phone"
-                     required
-                     value={formState.phone}
-                     onChange={handleChange}
-                     className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all" 
-                     placeholder="联系电话" 
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">电子邮箱</label>
-                  <input 
-                     type="email" 
-                     name="email"
-                     value={formState.email}
-                     onChange={handleChange}
-                     className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all" 
-                     placeholder="example@email.com" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">咨询类型</label>
-                  <div className="relative">
-                     <select 
-                        name="type"
-                        value={formState.type}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all appearance-none cursor-pointer"
-                     >
-                        <option>工程监理</option>
-                        <option>项目管理</option>
-                        <option>造价咨询</option>
-                        <option>招标代理</option>
-                        <option>商务合作</option>
-                        <option>其他</option>
-                     </select>
-                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                     </div>
+            <div className="relative z-10">
+               <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                     <MessageSquare size={20} className="text-primary" />
                   </div>
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">咨询内容</label>
-                <textarea 
-                  name="message"
-                  rows={4} 
-                  required
-                  value={formState.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all resize-none" 
-                  placeholder="请简要描述您的项目情况或需求..."
-                ></textarea>
-              </div>
+                  在线留言
+               </h2>
+               <p className="text-gray-500 mb-8 text-sm pl-[3.25rem]">请填写以下信息，我们的工程专家将尽快为您提供专业解答。</p>
+               
+               <form onSubmit={handleSubmit} className="space-y-6">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   <div className="space-y-2">
+                     <label className="block text-sm font-bold text-gray-700">姓名 <span className="text-red-500">*</span></label>
+                     <input 
+                        type="text" 
+                        name="name"
+                        required
+                        value={formState.name}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-sm font-medium" 
+                        placeholder="怎么称呼您" 
+                     />
+                   </div>
+                   <div className="space-y-2">
+                     <label className="block text-sm font-bold text-gray-700">电话 <span className="text-red-500">*</span></label>
+                     <input 
+                        type="tel" 
+                        name="phone"
+                        required
+                        pattern="[0-9]*"
+                        value={formState.phone}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-sm font-medium" 
+                        placeholder="您的联系电话" 
+                     />
+                   </div>
+                 </div>
 
-              <button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className="w-full bg-primary text-white py-4 rounded-lg font-bold text-lg hover:bg-primary-dark transition-all shadow-lg shadow-primary/30 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
-               >
-                {isSubmitting ? (
-                   <span className="flex items-center"><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span> 提交中...</span>
-                ) : (
-                   <span className="flex items-center"><Send size={18} className="mr-2" /> 提交留言</span>
-                )}
-              </button>
-              
-              <p className="text-xs text-gray-400 text-center mt-4">
-                 提交即表示您同意我们的隐私政策。您的信息将严格保密。
-              </p>
-            </form>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   <div className="space-y-2">
+                     <label className="block text-sm font-bold text-gray-700">电子邮箱</label>
+                     <input 
+                        type="email" 
+                        name="email"
+                        value={formState.email}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-sm font-medium" 
+                        placeholder="接收回复的邮箱" 
+                     />
+                   </div>
+                   <div className="space-y-2">
+                     <label className="block text-sm font-bold text-gray-700">咨询类型</label>
+                     <div className="relative">
+                        <select 
+                           name="type"
+                           value={formState.type}
+                           onChange={handleChange}
+                           className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all appearance-none cursor-pointer text-sm font-medium"
+                        >
+                           <option>工程监理</option>
+                           <option>项目管理</option>
+                           <option>造价咨询</option>
+                           <option>招标代理</option>
+                           <option>商务合作</option>
+                           <option>其他</option>
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                     </div>
+                   </div>
+                 </div>
+                 
+                 <div className="space-y-2">
+                   <label className="block text-sm font-bold text-gray-700">咨询内容 <span className="text-red-500">*</span></label>
+                   <textarea 
+                     name="message"
+                     rows={4} 
+                     required
+                     value={formState.message}
+                     onChange={handleChange}
+                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all resize-none placeholder:text-gray-400 text-sm font-medium" 
+                     placeholder="请简要描述您的项目情况或具体需求，以便我们更好地为您服务..."
+                   ></textarea>
+                 </div>
+
+                 <button 
+                     type="submit" 
+                     disabled={isSubmitting}
+                     className="w-full bg-primary text-white py-4 rounded-xl font-bold text-base hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed disabled:active:scale-100 group"
+                  >
+                   {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                         <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> 
+                         正在提交...
+                      </span>
+                   ) : (
+                      <span className="flex items-center gap-2 group-hover:gap-3 transition-all">
+                         <Send size={18} /> 提交留言
+                      </span>
+                   )}
+                 </button>
+                 
+                 <div className="flex items-center justify-center gap-2 text-xs text-gray-400 mt-4">
+                    <ShieldCheck size={12} />
+                    <span>您的信息已通过SSL加密传输，我们将严格保密。</span>
+                 </div>
+               </form>
+            </div>
           </div>
         </div>
       </div>
