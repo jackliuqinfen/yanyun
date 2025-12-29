@@ -1,0 +1,42 @@
+name: Auto Unzip and Overwrite
+
+# 触发条件：当有代码推送到 main 分支，且包含 code.zip 文件时触发
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'code.zip' # 监听这个特定的压缩包
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Unzip archive
+        run: |
+          # 1. 解压 code.zip 到当前目录 (会自动覆盖同名文件)
+          unzip -o code.zip
+          
+          # 2. 删除压缩包 (可选，为了不保留冗余文件)
+          rm code.zip
+
+      - name: Commit and Push changes
+        run: |
+          # 配置 Git 机器人身份
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          
+          # 添加所有更改
+          git add .
+          
+          # 提交更改 (如果没有变化则不提交)
+          git commit -m "Auto-deployed via Zip Upload" || echo "No changes to commit"
+          
+          # 推送到仓库
+          git push
