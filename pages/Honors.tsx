@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, Calendar, CheckCircle2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import { storageService } from '../services/storageService';
 import { Honor, HonorCategory } from '../types';
+import PreviewWatermark from '../components/PreviewWatermark';
 
 const MotionDiv = motion.div as any;
 
@@ -67,8 +67,8 @@ const Honors: React.FC = () => {
                      className="max-w-full max-h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" 
                   />
                   {/* Overlay for Click Hint */}
-                  <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                     <span className="bg-white/90 backdrop-blur text-xs font-bold px-3 py-1.5 rounded-full shadow-sm text-gray-700">点击预览大图</span>
+                  <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-30">
+                     <span className="bg-white/90 backdrop-blur text-xs font-bold px-3 py-1.5 rounded-full shadow-sm text-gray-700 pointer-events-none">点击预览大图</span>
                   </div>
                </>
             ) : (
@@ -120,19 +120,29 @@ const Honors: React.FC = () => {
           >
              <button 
                 onClick={closePreview}
-                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors z-50"
              >
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
              </button>
-            <motion.img
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              src={previewImage}
-              alt="Preview"
-              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
+            <div className="relative max-w-full max-h-[90vh] overflow-hidden rounded-lg shadow-2xl bg-white" onClick={(e) => e.stopPropagation()}>
+               {/* New CSS-based Watermark Overlay */}
+               <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+               >
+                  <PreviewWatermark />
+               </motion.div>
+               
+               <motion.img
+                 initial={{ scale: 0.9 }}
+                 animate={{ scale: 1 }}
+                 exit={{ scale: 0.9 }}
+                 src={previewImage}
+                 alt="Preview"
+                 className="max-w-full max-h-[90vh] object-contain relative z-10"
+               />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
