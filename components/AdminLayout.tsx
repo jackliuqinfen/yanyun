@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileText, Briefcase, Settings, Users, Image, LogOut, Building, Globe, Award, Hexagon, Compass, Layout, History, UserCheck, ShieldCheck, ChevronRight, Clock, Menu, X, Megaphone, Lock, Loader2, AlertTriangle, Cloud, HardDrive, WifiOff, FileCheck, RefreshCw } from 'lucide-react';
+import { LayoutDashboard, FileText, Briefcase, Settings, Users, Image, LogOut, Building, Globe, Award, Hexagon, Compass, Layout, History, UserCheck, ShieldCheck, ChevronRight, Clock, Menu, X, Megaphone, Lock, Loader2, AlertTriangle, Cloud, HardDrive, WifiOff, FileCheck, RefreshCw, Sun, Moon } from 'lucide-react';
 import { storageService } from '../services/storageService';
 import { SiteSettings, ResourceType, User, Role } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,15 +13,15 @@ const MotionAside = motion.aside as any;
 const NAV_GROUPS = [
   {
     label: '概览',
-    items: [{ name: '仪表盘', path: '/admin/dashboard', icon: LayoutDashboard }]
+    items: [{ name: '控制台', path: '/admin/dashboard', icon: LayoutDashboard }]
   },
   {
-    label: '内容建设',
+    label: '内容管理',
     items: [
       { name: '页面文案', path: '/admin/pages', icon: Layout, resource: 'pages' as ResourceType },
       { name: '新闻动态', path: '/admin/news', icon: FileText, resource: 'news' as ResourceType },
-      { name: '招标信息', path: '/admin/tenders', icon: Megaphone, resource: 'tenders' as ResourceType },
-      { name: '企业业绩', path: '/admin/performances', icon: FileCheck, resource: 'performances' as ResourceType }, // Added
+      { name: '招标公告', path: '/admin/tenders', icon: Megaphone, resource: 'tenders' as ResourceType },
+      { name: '企业业绩', path: '/admin/performances', icon: FileCheck, resource: 'performances' as ResourceType }, 
       { name: '项目案例', path: '/admin/projects', icon: Briefcase, resource: 'projects' as ResourceType },
       { name: '业务领域', path: '/admin/services', icon: Hexagon, resource: 'services' as ResourceType },
     ]
@@ -37,13 +37,14 @@ const NAV_GROUPS = [
     ]
   },
   {
-    label: '资源与系统',
+    label: '系统资源',
     items: [
       { name: '媒体库', path: '/admin/media', icon: Image, resource: 'media' as ResourceType },
-      { name: '外部导航', path: '/admin/navigation', icon: Compass, resource: 'navigation' as ResourceType },
-      { name: '权限用户', path: '/admin/users', icon: Users, resource: 'users' as ResourceType }, 
+      { name: '导航管理', path: '/admin/navigation', icon: Compass, resource: 'navigation' as ResourceType },
+      { name: '用户与角色', path: '/admin/users', icon: Users, resource: 'users' as ResourceType }, 
       { name: '安全审计', path: '/admin/security', icon: ShieldCheck, resource: 'security' as ResourceType }, 
-      { name: '站点设置', path: '/admin/settings', icon: Settings, resource: 'settings' as ResourceType },
+      { name: '设计规范', path: '/admin/design-system', icon: Layout, resource: 'settings' as ResourceType }, 
+      { name: '系统设置', path: '/admin/settings', icon: Settings, resource: 'settings' as ResourceType },
     ]
   }
 ];
@@ -58,35 +59,46 @@ interface SidebarContentProps {
 }
 
 const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRole, currentPath, onLogout, logoUrl, onNavigate }) => {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(!isDark);
+
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-gray-900 text-white">
-      <div className="p-8 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center font-bold text-lg shadow-glow border border-white/10 overflow-hidden">
-             {logoUrl ? (
-               <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
-             ) : (
-               <span className="text-primary">Y</span>
-             )}
+    <div className="flex flex-col h-full overflow-hidden bg-slate-900 text-slate-300 dark:bg-gray-950 border-r border-slate-800 dark:border-gray-800">
+      <div className="p-6 flex-shrink-0 border-b border-slate-800/50 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 overflow-hidden p-1.5 transition-transform hover:scale-105">
+             <img src="/image/logo/tuxing.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
           <div>
-             <h2 className="text-lg font-black tracking-tighter uppercase italic leading-none">Yanyun OS</h2>
-             <p className="text-[9px] text-white/30 mt-1 font-bold tracking-widest uppercase">Professional Edition</p>
+             <h2 className="text-base font-bold text-white tracking-tight leading-none">江苏盐韵</h2>
+             <p className="text-[10px] text-slate-500 mt-1 font-medium tracking-wide">企业管理系统</p>
           </div>
         </div>
+        <button onClick={toggleTheme} className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors">
+           {isDark ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
       </div>
       
-      <nav className="flex-1 px-4 space-y-8 overflow-y-auto custom-scrollbar pb-6">
+      <nav className="flex-1 px-3 py-6 space-y-8 overflow-y-auto custom-scrollbar">
         {!currentRole && (
-           <div className="px-4 py-2 bg-red-900/20 border border-red-500/30 rounded-lg mb-4">
-              <p className="text-xs text-red-200 flex items-center gap-2"><AlertTriangle size={12}/> Role Config Error</p>
+           <div className="mx-2 px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-xl mb-4">
+              <p className="text-xs text-red-400 flex items-center gap-2 font-medium"><AlertTriangle size={14}/> Role Config Error</p>
            </div>
         )}
 
         {NAV_GROUPS.map((group, groupIdx) => (
           <div key={groupIdx}>
-            <h3 className="px-4 text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-3">{group.label}</h3>
-            <div className="space-y-1">
+            <h3 className="px-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">{group.label}</h3>
+            <div className="space-y-0.5">
               {group.items.map((item) => {
                 let hasPermission = false;
                 
@@ -110,12 +122,15 @@ const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRol
                     key={item.path}
                     to={item.path}
                     onClick={onNavigate}
-                    className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group touch-manipulation ${
-                      isActive ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]' : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                    className={`flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-all duration-200 group relative ${
+                      isActive 
+                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/20 font-medium' 
+                        : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-100'
                     }`}
                   >
-                    <Icon size={18} className={`${isActive ? 'text-white' : 'text-gray-500 group-hover:text-white'}`} />
-                    <span className="text-sm font-medium">{item.name}</span>
+                    <Icon size={18} className={`flex-shrink-0 transition-colors ${isActive ? 'text-indigo-200' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                    <span className="text-sm">{item.name}</span>
+                    {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-400 rounded-r-full"></div>}
                   </Link>
                 );
               })}
@@ -124,21 +139,21 @@ const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRol
         ))}
       </nav>
 
-      <div className="p-4 bg-black/20 m-4 rounded-2xl border border-white/5 flex-shrink-0">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-blue-400 p-0.5 flex-shrink-0">
-            <img src={currentUser?.avatar || 'https://placehold.co/100'} className="w-full h-full object-cover rounded-[10px]" alt="user" />
+      <div className="p-4 border-t border-slate-800/50 bg-slate-900/50">
+        <div className="flex items-center gap-3 mb-4 p-2 rounded-xl hover:bg-slate-800/50 transition-colors cursor-pointer group">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 p-[2px] flex-shrink-0 shadow-lg">
+            <img src={currentUser?.avatar || 'https://placehold.co/100'} className="w-full h-full object-cover rounded-[6px] bg-slate-800" alt="user" />
           </div>
-          <div className="min-w-0">
-            <p className="text-xs font-bold truncate">{currentUser?.name}</p>
-            <div className="flex items-center gap-1 text-[10px] text-white/40 truncate">
-               {currentUser?.mfaEnabled && <Lock size={8} className="text-emerald-500" />} 
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-slate-200 truncate group-hover:text-white transition-colors">{currentUser?.name}</p>
+            <div className="flex items-center gap-1.5 text-[10px] text-slate-500 truncate">
+               {currentUser?.mfaEnabled ? <Lock size={10} className="text-emerald-500" /> : <ShieldCheck size={10} className="text-slate-600"/>}
                {currentRole?.name || 'Unknown Role'}
             </div>
           </div>
         </div>
-        <button onClick={onLogout} className="w-full py-3 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95">
-          <LogOut size={12} /> 安全退出
+        <button onClick={onLogout} className="w-full py-2.5 bg-slate-800 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 border border-slate-700 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] text-slate-400">
+          <LogOut size={14} /> 安全退出
         </button>
       </div>
     </div>

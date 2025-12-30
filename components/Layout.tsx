@@ -114,12 +114,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
           <div className="flex space-x-8">
-            <span className="flex items-center hover:text-white transition-colors cursor-pointer group">
-              <Phone size={13} className="mr-2 text-blue-400 group-hover:text-white transition-colors" /> 
+            <span className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
+              <Phone size={13} className="text-blue-400 group-hover:text-white transition-colors" /> 
               <span className="font-mono tracking-wider">{settings.contactPhone}</span>
             </span>
-            <span className="flex items-center hover:text-white transition-colors cursor-pointer group">
-              <Mail size={13} className="mr-2 text-blue-400 group-hover:text-white transition-colors" /> 
+            <span className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
+              <Mail size={13} className="text-blue-400 group-hover:text-white transition-colors" /> 
               {settings.contactEmail}
             </span>
           </div>
@@ -193,26 +193,21 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 transition={{ duration: 0.5 }}
               />
               
-              {/* Text Logo - Hidden on mobile, visible on desktop */}
-              <MotionImg 
+              {/* Text Logo - Visible on all devices now */}
+              <img 
                 src="/image/logo/wenzi.png" 
                 alt="江苏盐韵文字标识" 
-                className="h-full w-auto object-contain hidden md:block"
-                initial={false}
-                animate={{
-                  filter: isLightHeader 
-                    ? 'brightness(0.2) opacity(0.9)' // Dark text on light header
-                    : 'brightness(0) invert(1) opacity(1)', // White text on dark header
-                  scale: scrolled ? 0.95 : 1,
-                  opacity: 1
-                }}
-                transition={{ duration: 0.6 }}
+                className={`h-[120%] w-auto object-contain transition-all duration-500 ${
+                  isLightHeader 
+                    ? 'brightness-0 opacity-80' // Dark text (black) with slight opacity
+                    : 'brightness-0 invert' // White text
+                } ${scrolled ? 'scale-95' : 'scale-100'} block`}
               />
             </Link>
 
             {/* Desktop Nav - Optimized for Visibility */}
             <div className="hidden xl:flex items-center space-x-2">
-              <nav className="flex space-x-1 mr-4">
+              <nav className="flex items-center mr-4">
                 {navLinks.map((link) => {
                   const active = isActive(link.path, location.pathname);
                   // Logic for active state visuals based on header background
@@ -233,7 +228,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     <Link
                       key={link.id}
                       to={link.path}
-                      className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
+                      className={`px-3 2xl:px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 whitespace-nowrap ${
                         active ? activeClass : inactiveClass
                       }`}
                     >
@@ -244,14 +239,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </nav>
               <Link 
                 to="/contact" 
-                className={`flex items-center px-5 py-2.5 rounded-full text-sm font-bold shadow-lg transition-all transform hover:-translate-y-1 active:scale-95 flex-shrink-0 ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold shadow-lg transition-all transform hover:-translate-y-1 active:scale-95 flex-shrink-0 whitespace-nowrap ${
                   isLightHeader 
                     ? 'bg-gray-900 text-white hover:bg-black shadow-gray-900/20' 
                     : 'bg-white text-primary hover:shadow-white/20'
                 }`}
               >
                 <span>联系我们</span>
-                <ArrowRight size={16} className="ml-2" />
+                <ArrowRight size={16} />
               </Link>
             </div>
 
@@ -259,7 +254,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className="xl:hidden flex items-center relative z-50">
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`p-2 rounded-lg transition-colors ${isLightHeader || isMobileMenuOpen ? 'text-gray-800' : 'text-white'}`}
+                className={`w-12 h-12 flex items-center justify-center rounded-lg transition-colors ${isLightHeader || isMobileMenuOpen ? 'text-gray-800' : 'text-white'}`}
+                aria-label="Toggle Menu"
               >
                 {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
