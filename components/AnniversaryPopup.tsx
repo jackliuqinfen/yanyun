@@ -22,7 +22,7 @@ const AnniversaryPopup: React.FC = () => {
   const frameIdRef = useRef<number>(0);
   
   // Unique session key to ensure it only shows once per session unless settings change
-  const SESSION_KEY = 'yanyun_anniversary_v9_final';
+  const SESSION_KEY = 'yanyun_newyear_2026_v1';
 
   useEffect(() => {
     // 1. Check Global Settings from Storage
@@ -30,6 +30,8 @@ const AnniversaryPopup: React.FC = () => {
     setSettings(currentSettings); 
     const hasSeen = sessionStorage.getItem(SESSION_KEY);
     
+    // Always show if enabled and not seen, or strictly for this demo task we might want to ensure it pops up?
+    // The user said "modify content", implying the mechanism works.
     if (currentSettings.enableAnniversary && !hasSeen) {
        const timer = setTimeout(() => setIsOpen(true), 1200); 
        return () => clearTimeout(timer);
@@ -374,93 +376,103 @@ const AnniversaryPopup: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 1.2 }} // 1.2s fade in/out
           className="fixed inset-0 z-[9999] overflow-hidden flex items-center justify-center font-sans"
-          style={{ background: 'radial-gradient(circle at center, #1a0505 0%, #000000 100%)' }}
+          style={{ background: 'radial-gradient(circle at center, #3a0000 0%, #000000 100%)' }} // Deep Red to Black
       >
         <div ref={containerRef} className="absolute inset-0 pointer-events-none z-0" />
         
         <MotionDiv 
-            initial={{ scale: 0.8, opacity: 0, y: 50 }}
+            initial={{ scale: 0.9, opacity: 0, y: 30 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.8, opacity: 0, y: 50 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 120, delay: 0.1 }}
-            className="relative z-10 w-[92%] max-w-[480px]"
+            exit={{ scale: 0.9, opacity: 0, y: 30 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 100, duration: 1.5 }}
+            className="relative z-10 w-[92%] max-w-[500px]"
         >
-           {/* Glassmorphism Card */}
-           <div className="absolute inset-0 bg-red-950/60 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 shadow-[0_0_80px_-20px_rgba(220,38,38,0.5)]"></div>
+           {/* Glassmorphism Card with Red/Gold Theme */}
+           <div className="absolute inset-0 bg-red-900/40 backdrop-blur-3xl rounded-[2.5rem] border border-yellow-500/20 shadow-[0_0_100px_-20px_rgba(255,215,0,0.3)]"></div>
            
-           {/* Decorative Elements */}
-           <div className="absolute inset-4 border border-yellow-500/20 rounded-[2rem] pointer-events-none"></div>
+           {/* Decorative Lanterns (CSS/SVG) */}
+           <div className="absolute -top-10 left-8 w-16 h-24 origin-top animate-[swing_3s_infinite_ease-in-out]">
+              <div className="w-1 bg-yellow-600 h-8 mx-auto"></div>
+              <div className="w-16 h-14 bg-red-600 rounded-xl shadow-lg shadow-red-500/50 flex items-center justify-center border-2 border-yellow-400">
+                  <span className="text-yellow-200 font-serif text-lg">福</span>
+              </div>
+              <div className="w-full flex justify-center gap-1 mt-[-2px]">
+                 <div className="w-0.5 h-6 bg-yellow-600"></div>
+                 <div className="w-0.5 h-6 bg-yellow-600"></div>
+                 <div className="w-0.5 h-6 bg-yellow-600"></div>
+              </div>
+           </div>
+           <div className="absolute -top-6 right-8 w-12 h-20 origin-top animate-[swing_4s_infinite_ease-in-out_1s]">
+              <div className="w-1 bg-yellow-600 h-6 mx-auto"></div>
+              <div className="w-12 h-10 bg-red-600 rounded-lg shadow-lg shadow-red-500/50 flex items-center justify-center border-2 border-yellow-400">
+                  <span className="text-yellow-200 font-serif text-sm">春</span>
+              </div>
+               <div className="w-full flex justify-center gap-1 mt-[-2px]">
+                 <div className="w-0.5 h-4 bg-yellow-600"></div>
+                 <div className="w-0.5 h-4 bg-yellow-600"></div>
+              </div>
+           </div>
 
            <div className="relative p-12 text-center flex flex-col items-center">
-                {/* FULL COMPANY NAME */}
-                <MotionH2 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 text-lg md:text-xl font-bold tracking-[0.1em] mb-4 drop-shadow-lg"
-                >
-                    江苏盐韵工程项目管理有限公司
-                </MotionH2>
-
                 {/* Badge */}
                 <MotionDiv 
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-900/50 border border-yellow-500/30 mb-8"
+                    className="flex items-center gap-2 px-5 py-2 rounded-full bg-red-950/80 border border-yellow-500/50 mb-6 mt-4"
                 >
-                    <Award size={14} className="text-yellow-400" />
-                    <span className="text-[10px] font-black text-yellow-100 tracking-widest uppercase">Eight Year Anniversary</span>
+                    <Award size={16} className="text-yellow-400" />
+                    <span className="text-xs font-bold text-yellow-100 tracking-widest uppercase">Happy New Year 2026</span>
                 </MotionDiv>
 
-                {/* Big Number and Overlapping Fix */}
-                <div className="relative mb-8 w-full flex justify-center">
-                    <div className="absolute inset-0 bg-yellow-500/20 blur-[60px] rounded-full animate-pulse"></div>
+                {/* Big Number / Title */}
+                <div className="relative mb-6 w-full flex justify-center flex-col items-center">
+                    <div className="absolute inset-0 bg-red-500/20 blur-[80px] rounded-full animate-pulse"></div>
                     <MotionH1 
-                        initial={{ scale: 0.5, opacity: 0 }}
+                        initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ type: 'spring', damping: 15, stiffness: 100, delay: 0.5 }}
-                        className="text-[160px] leading-none font-serif font-medium relative z-10"
+                        className="text-7xl md:text-8xl font-serif font-bold relative z-10 tracking-tighter"
                         style={{ 
                             background: 'linear-gradient(180deg, #FFF8E7 0%, #FFD700 45%, #E6B800 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
-                            filter: 'drop-shadow(0 15px 40px rgba(255, 215, 0, 0.3))'
+                            filter: 'drop-shadow(0 10px 30px rgba(255, 215, 0, 0.4))'
                         }}
                     >
-                        8
+                        2026
                     </MotionH1>
-                    
-                    {/* Fixed Position: Moved much tighter to the bottom-right of the 8 */}
-                    <MotionDiv 
-                        initial={{ opacity: 0, rotate: 10, scale: 0.5 }}
-                        animate={{ opacity: 1, rotate: -5, scale: 1 }}
-                        transition={{ delay: 0.8, type: "spring" }}
-                        className="absolute bottom-2 -right-4 bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-black px-4 py-2 rounded-lg shadow-[0_10px_20px_rgba(0,0,0,0.3)] border border-red-400/50 transform translate-x-1/2 z-20 whitespace-nowrap"
-                    >
-                        周年庆典 🎉
-                    </MotionDiv>
-                </div>
-
-                {/* Slogan */}
-                <div className="space-y-4 mb-12">
-                    <MotionH1 
+                    <MotionH2 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.7 }}
-                        className="text-3xl md:text-4xl font-serif font-bold text-white tracking-[0.15em]"
+                        className="text-4xl md:text-5xl font-black text-white mt-2 tracking-widest"
+                        style={{ textShadow: '0 4px 10px rgba(185, 28, 28, 0.8)' }}
                     >
-                        {settings.anniversaryTitle || '"盐"续匠心，"韵"致八载'}
-                    </MotionH1>
+                        元旦快乐
+                    </MotionH2>
+                </div>
+
+                {/* Company Name & Message */}
+                <div className="space-y-4 mb-10 relative z-20">
+                    <MotionH2 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.9 }}
+                        className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-100 to-yellow-200 text-lg font-bold tracking-[0.05em] drop-shadow-sm"
+                    >
+                        江苏盐韵工程项目管理有限公司
+                    </MotionH2>
                     
                     <MotionP 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.9 }}
-                        className="text-sm text-yellow-100/50 font-light tracking-[0.2em]"
+                        transition={{ delay: 1.1 }}
+                        className="text-sm text-white/80 font-light tracking-[0.1em]"
                     >
-                        {settings.anniversarySubtitle || '感恩一路同行，共鉴品质工程'}
+                        辞旧迎新，共赴锦绣前程<br/>祝您在新的一年里万事胜意！
                     </MotionP>
                 </div>
 
@@ -469,16 +481,16 @@ const AnniversaryPopup: React.FC = () => {
                     whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(234, 179, 8, 0.4)' }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleClose}
-                    className="relative w-full py-4 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-700 text-white rounded-2xl font-black tracking-[0.3em] text-sm shadow-2xl shadow-yellow-900/50 flex items-center justify-center gap-3 overflow-hidden group"
+                    className="relative w-full py-4 bg-gradient-to-r from-red-600 via-red-500 to-red-700 text-white rounded-xl font-bold tracking-[0.2em] text-base shadow-xl shadow-red-900/50 flex items-center justify-center gap-2 overflow-hidden group border border-white/10"
                 >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                    <Gift size={18} /> 开启盐韵新篇
+                    <Gift size={20} /> 领取新年祝福
                 </MotionButton>
 
                 {/* Close Button */}
                 <button 
                     onClick={handleClose}
-                    className="absolute top-6 right-6 p-2 text-white/20 hover:text-white hover:bg-white/10 rounded-full transition-all"
+                    className="absolute top-4 right-4 p-2 text-white/30 hover:text-white hover:bg-white/10 rounded-full transition-all"
                 >
                     <X size={24} />
                 </button>
