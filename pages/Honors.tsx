@@ -47,6 +47,11 @@ const Honors: React.FC = () => {
      setPreviewImage(null);
   };
 
+  // Filter categories to only show those that have honors
+  const visibleCategories = categories.filter(cat => 
+    honors.some(h => h.categoryId === cat.id)
+  );
+
   const renderHonorCard = (honor: Honor) => (
       <MotionDiv
          layout
@@ -162,7 +167,7 @@ const Honors: React.FC = () => {
                    全部资质
                    {activeCategory === 'all' && <CheckCircle2 size={16} />}
                 </button>
-                {categories.map(cat => (
+                {visibleCategories.map(cat => (
                    <button
                       key={cat.id}
                       onClick={() => setActiveCategory(cat.id)}
@@ -181,7 +186,7 @@ const Honors: React.FC = () => {
           <div className="flex-1">
              {activeCategory === 'all' ? (
                 <div className="space-y-16">
-                   {categories.map(cat => {
+                   {visibleCategories.map(cat => {
                       const catHonors = honors.filter(h => h.categoryId === cat.id);
                       if (catHonors.length === 0) return null;
                       return (

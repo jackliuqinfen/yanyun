@@ -134,7 +134,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   contactEmail: 'yysjzx@vip.163.com',
   contactAddress: '江苏省盐城市盐南高新区凤凰金宝广场4号楼608室',
   copyrightText: '© 2025 江苏盐韵工程项目管理有限公司 版权所有 苏ICP备12345678号',
-  enableAnniversary: true, 
+  enableAnniversary: false, 
   anniversaryTitle: '盐韵八载 · 匠心传诚',
   anniversarySubtitle: '感恩一路同行，共鉴品质工程',
   anniversaryBadgeLabel: 'Est. 2017',
@@ -356,7 +356,7 @@ export const INITIAL_PAGE_CONTENT: PageContent = {
   about: {
     intro: {
       title: '不仅仅是监理，更是您的资产管家',
-      content1: '江苏盐韵工程项目管理有限公司成立于2017年，是江苏省内成长速度最快的综合型工程咨询服务商之一。',
+      content1: '江苏盐韵工程项目管理有限公司成立于2017年，是江苏省内成长速度快速的综合型工程咨询服务商之一。',
       content2: '我们不满足于传统的“三控三管一协调”，更在全行业率先推广“数智化工地”模型，为业主的每一分投资护航。',
       imageUrl: '/image/other/img_1767022705983_photo-1497215728101-856f4ea42174.jpg'
     },
@@ -399,7 +399,7 @@ export const INITIAL_NEWS: NewsItem[] = [
 ];
 
 export const INITIAL_BRANCH_CATEGORIES: BranchCategory[] = [{ id: 'cat_hq', name: '总部及研发中心', order: 0 }];
-export const INITIAL_BRANCHES: Branch[] = [{ id: '1', name: '盐韵总部', address: '江苏省盐城市盐南高新区凤凰金宝广场4号楼608室', phone: '0515-88818606', manager: '张总经理', coordinates: { lat: 33.347, lng: 120.163 }, categoryId: 'cat_hq' }];
+export const INITIAL_BRANCHES: Branch[] = [{ id: '1', name: '盐韵总部', address: '江苏省盐城市盐南高新区凤凰金宝广场4号楼608室', phone: '0515-88818606', manager: '张先生', coordinates: { lat: 33.347, lng: 120.163 }, categoryId: 'cat_hq' }];
 
 export const INITIAL_LINKS: NavigationLink[] = [
   // 一、政府监管平台

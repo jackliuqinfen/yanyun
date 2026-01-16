@@ -137,7 +137,7 @@ const NewsDetail: React.FC = () => {
                 </p>
                 <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">追求卓越，止于至善</h3>
                 <p>
-                  作为行业内的领军企业，江苏盐韵始终坚持“质量第一，安全至上”的原则。在本项目中，我们采用了最新的BIM技术进行全过程模拟，有效规避了施工风险，提高了管理效率。
+                  作为行业内的领军企业，江苏盐韵始终坚持“质量为本，安全至上”的原则。在本项目中，我们采用了最新的BIM技术进行全过程模拟，有效规避了施工风险，提高了管理效率。
                 </p>
                 <blockquote className="border-l-4 border-primary pl-4 italic text-gray-600 my-8 bg-blue-50/50 p-4 rounded-r-lg">
                   "工程质量是企业的生命线，我们必须以工匠精神对待每一个细节。" —— 公司总经理

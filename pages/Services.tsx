@@ -165,7 +165,7 @@ const Services: React.FC = () => {
          <div className="container mx-auto px-6 max-w-4xl">
             <div className="text-center mb-12">
                <h2 className="text-3xl font-bold text-gray-900">常见问题解答</h2>
-               <p className="text-gray-500 mt-2">解决您的顾虑，是合作的第一步</p>
+               <p className="text-gray-500 mt-2">解决您的顾虑，是合作的基础</p>
             </div>
             <div className="space-y-4">
                {content.faqs.map((faq, idx) => (
@@ -203,7 +203,7 @@ const Services: React.FC = () => {
         <div className="container mx-auto px-6 text-center relative z-10">
           <h2 className="text-3xl font-bold mb-6">不仅是服务，更是承诺</h2>
           <p className="text-gray-400 max-w-2xl mx-auto mb-10">
-            无论您的项目规模大小，我们都将全力以赴，为您提供最优质的专业服务。
+            无论您的项目规模大小，我们都将全力以赴，为您提供专业可靠的服务。
           </p>
           <a href="#/contact" className="inline-block px-10 py-4 bg-primary text-white font-bold rounded-lg shadow-lg hover:bg-primary-dark transition-colors border border-primary hover:border-primary-dark">
             联系我们获取方案

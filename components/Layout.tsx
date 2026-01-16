@@ -93,8 +93,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isAtHome = location.pathname === '/';
   const isLightHeader = scrolled || !isAtHome;
 
-  // Don't show anniversary popup on admin pages OR inner pages. Only show on Homepage.
-  const showPopup = location.pathname === '/' && !location.pathname.startsWith('/admin');
+  // Don't show anniversary popup on admin pages OR inner pages. Only show on Homepage if enabled in settings.
+  // const showPopup = settings.enableAnniversary && location.pathname === '/' && !location.pathname.startsWith('/admin');
+  const showPopup = false; // Temporarily disabled per user request
 
   // Helper function to check if link is active
   const isActive = (path: string, currentPath: string) => {
