@@ -17,12 +17,12 @@ const SpringFestivalPopup: React.FC = () => {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const frameIdRef = useRef<number>(0);
   
-  const SESSION_KEY = 'yanyun_horse_year_2026_v6_fireworks';
+  const SESSION_KEY = 'yanyun_horse_year_2026_v14_centered';
 
   useEffect(() => {
     // Inject Google Font for Calligraphy
     const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Noto+Serif+SC:wght@700&display=swap';
+    link.href = 'https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Noto+Serif+SC:wght@400;700;900&display=swap';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
@@ -365,91 +365,126 @@ const SpringFestivalPopup: React.FC = () => {
                      }}
                 />
 
-                {/* Content Container */}
-                <div className="relative px-8 py-12 md:px-12 md:py-16 flex flex-col items-center text-center">
+                {/* Content Container - "Royal Scroll" Layout */}
+                <div className="relative px-6 py-10 md:px-12 md:py-16 flex flex-col items-center text-center">
                     
-                    {/* Floating Seal Animation */}
+                    {/* Ornamental Frame Border */}
+                    <div className="absolute inset-4 border-[3px] border-double border-[#B8860B]/30 rounded-2xl pointer-events-none"></div>
+                    <div className="absolute inset-4 border border-[#B8860B]/10 rounded-2xl pointer-events-none transform scale-[0.98]"></div>
+
+                    {/* Top Center: The Imperial Seal "Fu" */}
                     <MotionDiv 
-                        animate={{ rotate: [0, 5, -5, 0] }}
-                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                        className="mb-6"
+                        initial={{ opacity: 0, scale: 0, y: -20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
+                        className="relative z-20 -mt-6 mb-6"
                     >
-                        <div className="w-20 h-20 border-4 border-[#8B0000] text-[#8B0000] rounded-xl flex items-center justify-center rotate-45 shadow-lg bg-[#fffbf0]">
-                            <span className="text-4xl font-bold -rotate-45" style={{ fontFamily: '"Ma Shan Zheng", cursive' }}>
+                        <div className="w-16 h-16 md:w-20 md:h-20 bg-[#8B0000] text-[#FFD700] rounded-xl flex items-center justify-center shadow-lg border-2 border-[#FFD700] rotate-45 transform hover:rotate-0 transition-transform duration-500">
+                            <span className="text-3xl md:text-4xl font-bold -rotate-45" style={{ fontFamily: '"Ma Shan Zheng", cursive' }}>
                                 福
                             </span>
                         </div>
+                        {/* Tassel Effect (Simulated) */}
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 w-[2px] h-12 bg-gradient-to-b from-[#FFD700] to-transparent opacity-60"></div>
                     </MotionDiv>
 
-                    {/* Main Title Group */}
-                    <div className="relative mb-8 z-10">
-                         {/* Glowing Backlight for Text */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-red-500/20 blur-3xl -z-10 rounded-full"></div>
-
-                        <MotionH1 
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.5, duration: 0.8 }}
-                            className="text-8xl md:text-9xl text-[#8B0000] leading-none tracking-tighter"
-                            style={{ 
-                                fontFamily: '"Ma Shan Zheng", cursive',
-                                filter: 'drop-shadow(0 4px 6px rgba(139,0,0,0.3))'
-                            }}
-                        >
-                            2026
-                        </MotionH1>
+                    {/* Main Title Block */}
+                    <div className="relative mb-8 z-10 w-full px-8 md:px-16 flex flex-col items-center">
                         
-                        <div className="flex items-center justify-center gap-4 mt-2">
-                            <div className="h-[2px] w-12 bg-gradient-to-r from-transparent to-[#B8860B]"></div>
+                        {/* Main Title - "Golden Horse Announces Good News" */}
+                        <div className="relative inline-block">
+                            {/* Animated Glow Behind Text */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-red-500/10 blur-xl rounded-full animate-pulse"></div>
+                            
                             <MotionH1 
-                                initial={{ scale: 0.5, opacity: 0 }}
+                                initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                transition={{ delay: 0.8, type: 'spring' }}
-                                className="text-4xl md:text-5xl text-[#B8860B] font-bold"
-                                style={{ fontFamily: '"ZCOOL KuaiLe", cursive' }}
+                                transition={{ delay: 0.6, type: 'spring', bounce: 0.4 }}
+                                className="relative text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#d9ad26] to-[#8B0000] leading-tight tracking-tight drop-shadow-sm py-2 whitespace-nowrap"
+                                style={{ 
+                                    fontFamily: '"Ma Shan Zheng", cursive',
+                                    textShadow: '0 2px 0 rgba(139,0,0,0.1)'
+                                }}
                             >
-                                金马贺岁
+                                金马报喜
                             </MotionH1>
-                            <div className="h-[2px] w-12 bg-gradient-to-l from-transparent to-[#B8860B]"></div>
                         </div>
+                        
+                        {/* Greeting Line - "Red Ribbon" Style */}
+                        <MotionDiv 
+                            initial={{ width: 0, opacity: 0 }}
+                            animate={{ width: "auto", opacity: 1 }}
+                            transition={{ delay: 0.8, duration: 0.8 }}
+                            className="mt-4 inline-block relative"
+                        >
+                             <div className="absolute inset-0 bg-[#8B0000] transform -skew-x-12 rounded-sm shadow-sm opacity-10"></div>
+                             <p className="relative px-6 py-1 text-[#8B0000] font-bold text-sm md:text-base tracking-widest"
+                                style={{ fontFamily: '"Noto Serif SC", serif' }}>
+                                 盐韵工程项目管理给您拜年啦！
+                             </p>
+                        </MotionDiv>
                     </div>
 
-                    {/* Poetic Message */}
+                    {/* Poetic Message - Elegant & Clean */}
                     <MotionP 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 1 }}
-                        className="text-[#5a3a2a] text-lg md:text-xl font-medium leading-relaxed mb-10"
+                        transition={{ delay: 1.0 }}
+                        className="text-[#4a3a3a] text-base md:text-lg font-medium leading-relaxed mb-8 px-4 relative max-w-md mx-auto"
                         style={{ fontFamily: '"Noto Serif SC", serif' }}
                     >
-                        乘风破浪会有时，直挂云帆济沧海。<br/>
-                        愿您新的一年：<br/>
-                        <span className="text-[#c0392b] text-2xl mx-1" style={{ fontFamily: '"Ma Shan Zheng", cursive' }}>宏图大展</span>
-                        <span className="mx-2 text-[#B8860B]">·</span>
-                        <span className="text-[#c0392b] text-2xl mx-1" style={{ fontFamily: '"Ma Shan Zheng", cursive' }}>马到成功</span>
+                        2026，让我们以
+                        <span className="text-[#c0392b] font-black text-xl md:text-2xl mx-1 italic" style={{ fontFamily: '"Ma Shan Zheng", cursive' }}>“马”不停蹄</span>
+                        的进取之心，<br/>
+                        共筑每一个精品工程。
                     </MotionP>
 
-                    {/* CTA Button */}
-                    <MotionButton
-                        whileHover={{ scale: 1.05, boxShadow: "0 20px 30px -10px rgba(184, 134, 11, 0.5)" }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={handleClose}
-                        className="group relative px-14 py-4 bg-gradient-to-r from-[#8B0000] to-[#c0392b] text-[#FFD700] rounded-full text-xl shadow-xl overflow-hidden"
-                        style={{ fontFamily: '"Ma Shan Zheng", cursive' }}
-                    >
-                        <span className="relative z-10 flex items-center gap-2 tracking-widest">
-                            开启鸿运 <ChevronRight size={20} />
-                        </span>
-                        {/* Shine Effect */}
-                        <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 group-hover:left-[100%] transition-all duration-700 ease-in-out"></div>
-                    </MotionButton>
+                    {/* Mobile Only: Horizontal Couplets (Vertical ones hidden on mobile) */}
+                    <div className="md:hidden flex flex-col gap-2 w-full mb-6 px-4 items-center">
+                        <div className="bg-[#8B0000] text-[#FFD700] py-2 px-3 rounded text-sm font-bold shadow-sm border border-[#B8860B]">
+                            盐立基石 · 筑造稳健未来
+                        </div>
+                        <div className="bg-[#8B0000] text-[#FFD700] py-2 px-3 rounded text-sm font-bold shadow-sm border border-[#B8860B]">
+                            韵传匠心 · 成就卓越管理
+                        </div>
+                    </div>
 
-                    {/* Close Button */}
+                    {/* Footer Group */}
+                    <div className="relative w-full flex flex-col items-center">
+                        <MotionP 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 1.6 }}
+                            className="text-[#B8860B] text-lg md:text-xl font-bold mb-6 flex items-center gap-2" 
+                            style={{ fontFamily: '"Ma Shan Zheng", cursive' }}
+                        >
+                            <span className="h-[1px] w-8 bg-[#B8860B]/50"></span>
+                            祝您：马到成功，万事胜意！
+                            <span className="h-[1px] w-8 bg-[#B8860B]/50"></span>
+                        </MotionP>
+
+                        <MotionButton
+                            whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(255, 215, 0, 0.4)" }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={handleClose}
+                            className="group relative px-12 py-3 bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-[#8B0000] rounded-full text-xl font-bold shadow-lg overflow-hidden border border-[#fff]/50"
+                            style={{ fontFamily: '"Ma Shan Zheng", cursive' }}
+                        >
+                            <span className="relative z-10 flex items-center gap-3 tracking-widest">
+                                开启鸿运 <ChevronRight size={22} strokeWidth={3} />
+                            </span>
+                            {/* Inner Glow */}
+                            <div className="absolute inset-0 bg-white/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </MotionButton>
+                    </div>
+
+                    {/* Close Button - Top Right, Subtle */}
                     <button 
                         onClick={handleClose}
-                        className="absolute top-4 right-4 p-2 text-[#8B0000]/40 hover:text-[#8B0000] hover:bg-[#8B0000]/5 rounded-full transition-all"
+                        className="absolute top-4 right-4 p-2 text-[#8B0000]/30 hover:text-[#8B0000] hover:bg-[#8B0000]/5 rounded-full transition-all duration-300 z-50"
+                        aria-label="关闭"
                     >
-                        <X size={24} />
+                        <X size={22} />
                     </button>
                 </div>
            </div>
