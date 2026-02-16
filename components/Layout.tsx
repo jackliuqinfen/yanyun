@@ -6,7 +6,8 @@ import { Menu, X, Phone, Mail, MapPin, ChevronRight, ArrowRight, ChevronDown, Mo
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '../services/storageService';
 import { SiteSettings, PageContent, TopNavLink } from '../types';
-import AnniversaryPopup from './AnniversaryPopup'; // Import the new popup
+import AnniversaryPopup from './AnniversaryPopup'; 
+import SpringFestivalPopup from './SpringFestivalPopup'; // Import the new Horse Year popup
 
 // Cast motion components to any to resolve property 'animate'/'initial' etc. missing errors in current type environment
 const MotionDiv = motion.div as any;
@@ -93,9 +94,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isAtHome = location.pathname === '/';
   const isLightHeader = scrolled || !isAtHome;
 
-  // Don't show anniversary popup on admin pages OR inner pages. Only show on Homepage if enabled in settings.
-  // const showPopup = settings.enableAnniversary && location.pathname === '/' && !location.pathname.startsWith('/admin');
-  const showPopup = false; // Temporarily disabled per user request
+  // Show Spring Festival Popup on Homepage
+  const showPopup = location.pathname === '/' && !location.pathname.startsWith('/admin');
 
   // Helper function to check if link is active
   const isActive = (path: string, currentPath: string) => {
@@ -106,7 +106,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen font-sans text-gray-800 bg-surface">
       
-      {showPopup && <AnniversaryPopup />}
+      {showPopup && <SpringFestivalPopup />}
 
       {/* Top Bar - Desktop Only */}
       <MotionDiv 
