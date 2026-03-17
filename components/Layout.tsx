@@ -95,7 +95,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isLightHeader = scrolled || !isAtHome;
 
   // Show Spring Festival Popup on Homepage
-  const showPopup = location.pathname === '/' && !location.pathname.startsWith('/admin');
+  const showPopup = location.pathname === '/' && !location.pathname.startsWith('/admin') && settings.enableAnniversary;
 
   // Helper function to check if link is active
   const isActive = (path: string, currentPath: string) => {

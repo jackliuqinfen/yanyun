@@ -26,11 +26,11 @@ const SpringFestivalPopup: React.FC = () => {
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
-    // const hasSeen = sessionStorage.getItem(SESSION_KEY);
-    // if (!hasSeen) {
+    const hasSeen = sessionStorage.getItem(SESSION_KEY);
+    if (!hasSeen) {
         const timer = setTimeout(() => setIsOpen(true), 1000); 
         return () => clearTimeout(timer);
-    // }
+    }
   }, []);
 
   const handleClose = () => {
