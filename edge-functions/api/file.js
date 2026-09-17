@@ -1,80 +1,105 @@
+/**
+ * 文件上传 / 读取接口（后台媒体库、新闻配图、案例图片）
+ *
+ * 与 kv.js 相同：KV 绑定通过 global YANYUN_DB / context.env.YANYUN_DB 双通道解析。
+ * 另修正：get(key, 'arrayBuffer') 第二个参数必须是字符串，不是 options 对象。
+ */
+
+const TOKEN = '8CG4Q0zhUzrvt14hsymoLNa+SJL9ioImlqabL5R+fJA=';
+const MAX_FILE_BYTES = 25 * 1024 * 1024; // KV 单值上限
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Id',
+};
+
+const MIME = {
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  gif: 'image/gif',
+  webp: 'image/webp',
+  svg: 'image/svg+xml',
+  mp4: 'video/mp4',
+  pdf: 'application/pdf',
+};
+
+const json = (body, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders },
+  });
+
+// 只允许安全字符，且禁止 .. 与绝对路径，防路径穿越
+const validKey = (k) =>
+  !!k && /^[A-Za-z0-9_.\-/]+$/.test(k) && !k.includes('..') && !k.startsWith('/');
+
+function resolveKV(context) {
+  try {
+    if (typeof YANYUN_DB !== 'undefined' && YANYUN_DB !== null) return YANYUN_DB;
+  } catch (e) {
+    // 未绑定，继续尝试下一通道
+  }
+  const fromEnv = context && context.env ? context.env.YANYUN_DB : undefined;
+  return fromEnv || null;
+}
 
 export async function onRequest(context) {
-  const { request, env } = context;
-  const db = env.YANYUN_DB;
-
-  // CORS headers
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Id',
-  };
+  const { request } = context;
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const url = new URL(request.url);
-  const key = url.searchParams.get('key');
+  const db = resolveKV(context);
+  if (!db) {
+    return json({ error: 'KV binding "YANYUN_DB" is not reachable at runtime.' }, 500);
+  }
+
+  const key = new URL(request.url).searchParams.get('key');
 
   try {
-    // --- GET: 读取文件 (公开访问，用于图片展示) ---
+    // --- GET: 读取（公开访问，用于前台图片展示） ---
     if (request.method === 'GET') {
       if (!key) return new Response('Key required', { status: 400, headers: corsHeaders });
+      if (!validKey(key)) return new Response('Invalid key', { status: 400, headers: corsHeaders });
 
-      // 以 arrayBuffer 形式读取，支持二进制图片
-      const fileData = await db.get(key, { type: 'arrayBuffer' });
-
+      const fileData = await db.get(key, 'arrayBuffer');
       if (!fileData) {
         return new Response('File not found', { status: 404, headers: corsHeaders });
       }
 
-      // 尝试从 key 后缀判断 mime type，默认 jpeg
-      let contentType = 'image/jpeg';
-      if (key.endsWith('.png')) contentType = 'image/png';
-      if (key.endsWith('.gif')) contentType = 'image/gif';
-      if (key.endsWith('.mp4')) contentType = 'video/mp4';
-      if (key.endsWith('.pdf')) contentType = 'application/pdf';
-
+      const ext = (key.split('.').pop() || '').toLowerCase();
       return new Response(fileData, {
         headers: {
           ...corsHeaders,
-          'Content-Type': contentType,
-          // 缓存控制：图片通常不会变，缓存久一点
-          'Cache-Control': 'public, max-age=86400' 
-        }
+          'Content-Type': MIME[ext] || 'application/octet-stream',
+          'Cache-Control': 'public, max-age=86400',
+        },
       });
     }
 
-    // --- POST: 上传文件 (需要鉴权) ---
+    // --- POST: 上传（需要鉴权） ---
     if (request.method === 'POST') {
-      // 1. 鉴权
       const authHeader = request.headers.get('Authorization');
-      const EXPECTED_TOKEN = '8CG4Q0zhUzrvt14hsymoLNa+SJL9ioImlqabL5R+fJA=';
-      
-      if (!authHeader || !authHeader.includes(EXPECTED_TOKEN)) {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), { 
-            status: 401, 
-            headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-        });
+      if (!authHeader || !authHeader.includes(TOKEN)) {
+        return json({ error: 'Unauthorized' }, 401);
+      }
+      if (!key) return json({ error: 'Key is required' }, 400);
+      if (!validKey(key)) return json({ error: 'Invalid key' }, 400);
+
+      const fileData = await request.arrayBuffer();
+      if (fileData.byteLength > MAX_FILE_BYTES) {
+        return json({ error: 'File too large (max 25MB)' }, 413);
       }
 
-      if (!key) return new Response(JSON.stringify({ error: 'Key is required' }), { status: 400, headers: corsHeaders });
-
-      // 2. 获取二进制数据
-      const fileData = await request.arrayBuffer();
-
-      // 3. 写入 KV
       await db.put(key, fileData);
-
-      return new Response(JSON.stringify({ success: true, url: `/api/file?key=${key}` }), {
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      });
+      return json({ success: true, url: `/api/file?key=${key}` });
     }
 
     return new Response('Method not allowed', { status: 405, headers: corsHeaders });
-
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: corsHeaders });
+    return json({ error: err.message }, 500);
   }
 }
