@@ -100,7 +100,11 @@ const INITIAL_DATA_MAP: Record<string, any> = {
 
 // Using relative path to allow Nginx to proxy
 const API_ENDPOINT = '/api/kv';
-const FILE_API_ENDPOINT = '/api/file';
+// 媒体上传走 Node.js 云函数直传腾讯云 COS（cloud-functions/api/upload.js）
+const FILE_API_ENDPOINT = '/api/upload';
+// 旧图读取仍由 edge-functions/api/file.js 从 KV 提供，保持向后兼容；
+// 若 /api/upload 尚未部署（404/405），上传自动回退到该端点
+const LEGACY_FILE_API_ENDPOINT = '/api/file';
 const HEALTH_ENDPOINT = '/api/health';
 const KV_ACCESS_TOKEN = '8CG4Q0zhUzrvt14hsymoLNa+SJL9ioImlqabL5R+fJA=';
 
@@ -216,14 +220,23 @@ export const storageService = {
     try {
         const formData = new FormData();
         formData.append('file', file);
-        
-        const response = await fetch(`${FILE_API_ENDPOINT}`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${KV_ACCESS_TOKEN}`
-            },
-            body: formData,
-        });
+
+        const doUpload = (endpoint: string) =>
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${KV_ACCESS_TOKEN}`
+                },
+                body: formData,
+            });
+
+        let response = await doUpload(FILE_API_ENDPOINT);
+
+        // COS 上传端点尚未部署时（路由未生效返回 404/405），回退到旧的 KV 上传端点
+        if (response.status === 404 || response.status === 405) {
+            console.warn(`[Storage] ${FILE_API_ENDPOINT} 不可用(${response.status})，回退到 ${LEGACY_FILE_API_ENDPOINT}`);
+            response = await doUpload(LEGACY_FILE_API_ENDPOINT);
+        }
 
         if (!response.ok) {
             const errText = await response.text();
@@ -231,7 +244,8 @@ export const storageService = {
         }
         
         const res = await response.json();
-        // 返回服务器生成的 URL (例如 /files/image_123.jpg)
+        // 返回 COS 公网地址，例如
+        // https://yanyun-1468935338.cos.ap-shanghai.myqcloud.com/media/20260917/xxx.jpg
         return res.url; 
     } catch (error: any) {
         console.error("Upload Asset Error", error);
