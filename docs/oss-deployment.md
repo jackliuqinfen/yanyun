@@ -5,9 +5,9 @@
 ## 1. Bucket 与资源域名
 
 - Bucket 名称：`yanyun-officalweb`（按需求保留此拼写）；地域：`oss-cn-shanghai`；标准存储。
-- 图片与 PDF 要在浏览器直接展示，需使用绑定到 OSS 的自定义 HTTPS 域名。OSS 默认域名会强制下载文件，不能作为 `OSS_PUBLIC_BASE_URL`。
-- 如采用公共读，必须保持写入权限为私有，且确认公共访问范围仅包含可公开的官网素材；如保留私有 Bucket，可配置 CDN 私有 Bucket 回源，并把 CDN 域名用作资源域名。
-- 中国内地 Bucket 使用的自定义域名需满足备案要求。水印组件通过 canvas 读取跨域 Logo，资源域名还需允许 `https://www.yysjzx.com` 的 GET/HEAD CORS 请求。
+- Bucket 保持「私有」并开启「阻止公共访问」，存储冗余使用同城冗余。资源域名为 `assets.yysjzx.com`，通过阿里云 CDN 的「OSS 私有 Bucket 回源」读取，不将域名直接指向 OSS 默认域名。
+- CDN 域名需配置 HTTPS 证书和 `assets` 的 CNAME；中国内地加速需要域名已备案。水印组件通过 canvas 读取跨域 Logo，CDN 响应需允许 `https://www.yysjzx.com` 的 GET/HEAD CORS 请求。
+- 私有回源只保护 OSS 源站：CDN 缓存中的图片默认仍可通过资源 URL 公开访问。已在浏览器显示的图片无法保证用户不能保存或截图；如需限制未授权访问，应另行设计 CDN URL 鉴权，且不得把不能保存当作其安全保证。
 
 ## 2. 最小权限上传身份
 
@@ -24,7 +24,7 @@
 | `OSS_ACCESS_KEY_SECRET` | 上述 RAM 身份的 AccessKey Secret |
 | `OSS_BUCKET` | `yanyun-officalweb` |
 | `OSS_REGION` | `oss-cn-shanghai` |
-| `OSS_PUBLIC_BASE_URL` | 已验证可公开读取的 HTTPS 资源域名，如 `https://assets.yysjzx.com`，不带尾部斜杠 |
+| `OSS_PUBLIC_BASE_URL` | 已验证可通过 CDN 读取的 HTTPS 资源域名 `https://assets.yysjzx.com`，不带尾部斜杠 |
 
 环境变量变更只对新部署生效。请在设置后重新部署，并先在预览环境验证登录、读写与上传。
 
