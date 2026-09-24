@@ -1,0 +1,46 @@
+# 官网后台与阿里云 OSS 部署清单
+
+此分支需要先完成云端配置，再合并到生产分支。未配置管理员认证和 OSS 时，登录及上传接口会拒绝请求。
+
+## 1. Bucket 与资源域名
+
+- Bucket 名称：`yanyun-officalweb`（按需求保留此拼写）；地域：`oss-cn-shanghai`；标准存储。
+- 图片与 PDF 要在浏览器直接展示，需使用绑定到 OSS 的自定义 HTTPS 域名。OSS 默认域名会强制下载文件，不能作为 `OSS_PUBLIC_BASE_URL`。
+- 如采用公共读，必须保持写入权限为私有，且确认公共访问范围仅包含可公开的官网素材；如保留私有 Bucket，可配置 CDN 私有 Bucket 回源，并把 CDN 域名用作资源域名。
+- 中国内地 Bucket 使用的自定义域名需满足备案要求。水印组件通过 canvas 读取跨域 Logo，资源域名还需允许 `https://www.yysjzx.com` 的 GET/HEAD CORS 请求。
+
+## 2. 最小权限上传身份
+
+为网站云函数创建单独的 RAM 身份，只授予对 `yanyun-officalweb/media/*` 的 `oss:PutObject` 权限。不要使用主账号 AccessKey。静态资源迁移可另用临时身份；不要把迁移权限留在运行时身份上。
+
+## 3. EdgeOne Pages 环境变量
+
+| 名称 | 用途 |
+|---|---|
+| `ADMIN_USERNAME` | 管理员账号，默认 `admin` |
+| `ADMIN_PASSWORD_HASH` | scrypt 密码摘要；在私人终端运行 `node scripts/hash_admin_password.mjs` 生成 |
+| `ADMIN_SESSION_SECRET` | 随机 32 字节以上字符串，用于签名 HttpOnly 会话 Cookie |
+| `OSS_ACCESS_KEY_ID` | 上述 RAM 身份的 AccessKey ID |
+| `OSS_ACCESS_KEY_SECRET` | 上述 RAM 身份的 AccessKey Secret |
+| `OSS_BUCKET` | `yanyun-officalweb` |
+| `OSS_REGION` | `oss-cn-shanghai` |
+| `OSS_PUBLIC_BASE_URL` | 已验证可公开读取的 HTTPS 资源域名，如 `https://assets.yysjzx.com`，不带尾部斜杠 |
+
+环境变量变更只对新部署生效。请在设置后重新部署，并先在预览环境验证登录、读写与上传。
+
+## 4. 迁移现有资源
+
+`node scripts/migrate_static_assets.mjs` 可先预览本地资源数量。上传时由受限迁移身份提供 `OSS_ACCESS_KEY_ID` 和 `OSS_ACCESS_KEY_SECRET`，运行 `node scripts/migrate_static_assets.mjs --apply`。脚本保持对象键为 `image/...`，已有内容 URL 的路径无需变化。
+
+上传后，检查 Logo、证书、首页图片等抽样 URL 是否返回 200 且在页面中正常显示。再将 `OSS_PUBLIC_BASE_URL` 设为资源域名并重新部署；构建会让所有 `/image/...` URL 指向 OSS。确认没有遗漏后，才从 Pages 的 `public/image` 移除旧文件。
+
+## 5. 验证与切换
+
+1. 未登录请求 `POST /api/upload` 应返回 401。
+2. 使用新管理员密码登录；旧的 `admin/admin` 不应再有效。
+3. 后台修改一条可回滚的内容，确认另一设备读取到云端内容。
+4. 分别上传 JPG 和 PDF，确认返回 URL 属于资源域名，浏览器可打开。
+5. 验证原有 `/api/file?key=...` 旧图仍可读。
+6. 轮换此前已暴露的凭据；从当前 Git 树移除的 `server/.env` 仍存在于历史提交，历史中的密钥必须失效。
+
+当前上传函数的单文件上限为 5 MB，受 EdgeOne 云函数 6 MB 请求体上限约束。大文件需要单独设计分片上传。

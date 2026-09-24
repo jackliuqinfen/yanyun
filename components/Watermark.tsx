@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { assetUrl } from '../utils/assetUrl';
 
 interface WatermarkProps {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ interface WatermarkProps {
 const Watermark: React.FC<WatermarkProps> = ({ 
   children, 
   text = "此图片仅用于盐韵官网展示使用 其他使用非法无效", 
-  logoUrl = "/image/logo/tuxing.png",
+  logoUrl = assetUrl("/image/logo/tuxing.png"),
   className = "",
   variant = 'dark',
   size = 'medium',

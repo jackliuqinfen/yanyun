@@ -5,6 +5,7 @@ import { LayoutDashboard, FileText, Briefcase, Settings, Users, Image, LogOut, B
 import { storageService } from '../services/storageService';
 import { SiteSettings, ResourceType, User, Role } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
+import { assetUrl } from '../utils/assetUrl';
 
 const MotionDiv = motion.div as any;
 const MotionAside = motion.aside as any;
@@ -59,7 +60,7 @@ interface SidebarContentProps {
 }
 
 const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRole, currentPath, onLogout, logoUrl, onNavigate }) => {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('yanyun_admin_theme') === 'dark');
 
   useEffect(() => {
     if (isDark) {
@@ -67,6 +68,7 @@ const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRol
     } else {
       document.documentElement.classList.remove('dark');
     }
+    localStorage.setItem('yanyun_admin_theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
   const toggleTheme = () => setIsDark(!isDark);
@@ -76,14 +78,14 @@ const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRol
       <div className="p-6 flex-shrink-0 border-b border-slate-800/50 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 overflow-hidden p-1.5 transition-transform hover:scale-105">
-             <img src="/image/logo/tuxing.png" alt="Logo" className="w-full h-full object-contain" />
+             <img src={assetUrl(logoUrl || '/image/logo/tuxing.png')} alt="江苏盐韵标志" className="w-full h-full object-contain" />
           </div>
           <div>
              <h2 className="text-base font-bold text-white tracking-tight leading-none">江苏盐韵</h2>
              <p className="text-[10px] text-slate-500 mt-1 font-medium tracking-wide">企业管理系统</p>
           </div>
         </div>
-        <button onClick={toggleTheme} className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors">
+        <button type="button" onClick={toggleTheme} aria-label={isDark ? '切换浅色模式' : '切换深色模式'} title={isDark ? '浅色模式' : '深色模式'} className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors">
            {isDark ? <Sun size={16} /> : <Moon size={16} />}
         </button>
       </div>
@@ -91,7 +93,7 @@ const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRol
       <nav className="flex-1 px-3 py-6 space-y-8 overflow-y-auto custom-scrollbar">
         {!currentRole && (
            <div className="mx-2 px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-xl mb-4">
-              <p className="text-xs text-red-400 flex items-center gap-2 font-medium"><AlertTriangle size={14}/> Role Config Error</p>
+              <p className="text-xs text-red-400 flex items-center gap-2 font-medium"><AlertTriangle size={14}/> 无法读取角色权限</p>
            </div>
         )}
 
@@ -122,6 +124,7 @@ const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRol
                     key={item.path}
                     to={item.path}
                     onClick={onNavigate}
+                    aria-current={isActive ? 'page' : undefined}
                     className={`flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-all duration-200 group relative ${
                       isActive 
                         ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/20 font-medium' 
@@ -148,7 +151,7 @@ const SidebarContent: React.FC<SidebarContentProps> = ({ currentUser, currentRol
             <p className="text-sm font-medium text-slate-200 truncate group-hover:text-white transition-colors">{currentUser?.name}</p>
             <div className="flex items-center gap-1.5 text-[10px] text-slate-500 truncate">
                {currentUser?.mfaEnabled ? <Lock size={10} className="text-emerald-500" /> : <ShieldCheck size={10} className="text-slate-600"/>}
-               {currentRole?.name || 'Unknown Role'}
+               {currentRole?.name || '角色未加载'}
             </div>
           </div>
         </div>
@@ -172,6 +175,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [storageStatus, setStorageStatus] = useState(storageService.getSystemStatus());
   
   const [isCheckingHealth, setIsCheckingHealth] = useState(false);
+  const [healthNotice, setHealthNotice] = useState<{ ok: boolean; text: string } | null>(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
@@ -180,7 +184,8 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const initAuth = async () => {
       const user = storageService.getCurrentUser();
       
-      if (!user || !storageService.isAuthenticated()) {
+      if (!user || !storageService.isAuthenticated() || !(await storageService.checkSession())) {
+        storageService.logout();
         if (mounted) navigate('/admin/login');
         return;
       }
@@ -256,12 +261,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const result = await storageService.checkHealth();
     setIsCheckingHealth(false);
     
-    // Simple alert for result (could be a modal in future)
-    if (result.status === 'ok') {
-        alert("✅ " + result.message);
-    } else {
-        alert("❌ 连接失败\n\n原因: " + result.message);
-    }
+    setHealthNotice({ ok: result.status === 'ok', text: result.message });
   };
 
   const getBreadcrumbs = () => {
@@ -283,7 +283,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className="w-16 h-16 border-4 border-gray-200 rounded-full"></div>
             <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
          </div>
-         <p className="mt-6 text-xs font-bold uppercase tracking-widest text-gray-500 animate-pulse">Initializing System Core...</p>
+         <p className="mt-6 text-sm font-medium text-gray-500">正在加载管理系统…</p>
       </div>
     );
   }
@@ -329,6 +329,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               />
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="关闭导航菜单"
                 className="absolute top-6 right-6 p-2 text-white/40 hover:text-white transition-colors"
               >
                 <X size={24} />
@@ -343,6 +344,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <div className="flex items-center gap-4">
              <button 
                onClick={() => setIsMobileMenuOpen(true)}
+               aria-label="打开导航菜单"
                className="p-2 -ml-2 text-gray-500 lg:hidden hover:bg-gray-100 rounded-lg active:scale-90 transition-transform"
              >
                <Menu size={24} />
@@ -376,7 +378,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                title="点击检测服务器连接"
              >
                 {isCheckingHealth ? <Loader2 size={12} className="animate-spin" /> : storageStatus.mode === 'CLOUD_SYNC' ? <Cloud size={12} /> : <HardDrive size={12} />}
-                {isCheckingHealth ? 'Checking...' : storageStatus.mode === 'CLOUD_SYNC' ? 'Cloud Sync Active' : 'Local Storage Only'}
+                {isCheckingHealth ? '检测中…' : storageStatus.mode === 'CLOUD_SYNC' ? '云端已连接' : '仅本地数据'}
                 {storageStatus.mode === 'LOCAL_ONLY' && <RefreshCw size={10} className="ml-1 opacity-50" />}
              </button>
 
@@ -388,6 +390,12 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
              </Link>
           </div>
         </header>
+        {healthNotice && (
+          <div role="status" className={`mx-4 mt-3 flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm md:mx-8 ${healthNotice.ok ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-red-200 bg-red-50 text-red-700'}`}>
+            <span>{healthNotice.text}</span>
+            <button type="button" onClick={() => setHealthNotice(null)} aria-label="关闭连接提示" className="rounded p-1 hover:bg-black/5"><X size={16} /></button>
+          </div>
+        )}
         
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8 custom-scrollbar bg-gray-50/50">
           {children}

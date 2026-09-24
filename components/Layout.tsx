@@ -8,6 +8,7 @@ import { storageService } from '../services/storageService';
 import { SiteSettings, PageContent, TopNavLink } from '../types';
 import AnniversaryPopup from './AnniversaryPopup'; 
 import SpringFestivalPopup from './SpringFestivalPopup'; // Import the new Horse Year popup
+import { assetUrl } from '../utils/assetUrl';
 
 // Cast motion components to any to resolve property 'animate'/'initial' etc. missing errors in current type environment
 const MotionDiv = motion.div as any;
@@ -183,7 +184,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <Link to="/" className="flex items-center space-x-2 md:space-x-3 group h-10 md:h-12 relative z-50">
               {/* Graphic Logo - Always visible, scales slightly */}
               <MotionImg 
-                src="/image/logo/tuxing.png" 
+                src={assetUrl('/image/logo/tuxing.png')}
                 alt="江苏盐韵图形标识" 
                 className="h-full w-auto object-contain"
                 animate={{
@@ -196,7 +197,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               
               {/* Text Logo - Visible on all devices now */}
               <img 
-                src="/image/logo/wenzi.png" 
+                src={assetUrl('/image/logo/wenzi.png')}
                 alt="江苏盐韵文字标识" 
                 className={`h-[120%] w-auto object-contain transition-all duration-500 ${
                   isLightHeader 
@@ -329,7 +330,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div>
               <div className="flex items-center space-x-2 mb-6">
                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1">
-                    <img src="/image/logo/tuxing.png" alt="江苏盐韵图形标识" className="w-full h-full object-contain" />
+                    <img src={assetUrl('/image/logo/tuxing.png')} alt="江苏盐韵图形标识" className="w-full h-full object-contain" />
                  </div>
                  <span className="text-xl font-bold tracking-tight">{settings.siteName}</span>
               </div>

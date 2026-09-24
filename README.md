@@ -4,6 +4,8 @@
 
 # Run and deploy your AI Studio app
 
+后台与阿里云 OSS 的生产配置、静态资源迁移及验证步骤见 [部署清单](docs/oss-deployment.md)。
+
 This contains everything you need to run your app locally.
 
 View your app in AI Studio: https://ai.studio/apps/drive/1hYGbdig8px89MTJDEzQFpLskrsdS19Nq
