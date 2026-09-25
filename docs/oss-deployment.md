@@ -6,8 +6,8 @@
 
 - Bucket 名称：`yanyun-officalweb`（按需求保留此拼写）；地域：`oss-cn-shanghai`；标准存储。
 - Bucket 保持「私有」并开启「阻止公共访问」，存储冗余使用同城冗余。资源域名为 `assets.yysjzx.com`，通过阿里云 CDN 的「OSS 私有 Bucket 回源」读取，不将域名直接指向 OSS 默认域名。
-- `assets` 的 CNAME 已指向阿里云 CDN；域名已正常运行，且已添加 `Access-Control-Allow-Origin: https://www.yysjzx.com` 响应头。HTTPS 尚需配置覆盖 `assets.yysjzx.com` 的正式证书；阿里云个人测试证书禁止用于生产环境。中国内地加速需要域名已备案。
-- 阿里云 CDN 的私有 OSS 回源一键授权是**账号级**一次性授权，官方策略允许 CDN 对账号下所有 OSS Bucket 执行 `oss:List*` / `oss:Get*`。若不能接受此范围，应通过 RAM 创建仅限 `yanyun-officalweb` 的自定义只读角色，再开启同账号 STS 回源。开启后，该 CDN 域名可读取此 Bucket 的全部对象。
+- `assets` 的 CNAME 已指向阿里云 CDN；域名已正常运行，且已添加 `Access-Control-Allow-Origin: https://www.yysjzx.com` 响应头。用户决定暂缓 HTTPS。正式切换图片前仍须配置覆盖 `assets.yysjzx.com` 的正式证书；阿里云个人测试证书禁止用于生产环境。中国内地加速需要域名已备案。
+- 用户选择仅授予 CDN 对 `yanyun-officalweb` 的自定义只读权限。**不要点击 CDN 的一键授权**：官方一键策略允许 CDN 对账号下所有 OSS Bucket 执行 `oss:List*` / `oss:Get*`。应通过 RAM 创建 CDN 服务信任角色，并只授予 `acs:oss:*:*:yanyun-officalweb/*` 的 `oss:GetObject`；再开启同账号 STS 回源。开启后，该 CDN 域名可读取此 Bucket 的全部对象。先用单个测试对象验证 GET/HEAD 回源，缺少必要操作时只在此 Bucket 范围内补足。
 - 水印组件通过 canvas 读取跨域 Logo，需验证 CDN 响应实际携带上述 CORS 头；目前 Bucket 为空，尚未完成端到端验证。
 - 私有回源只保护 OSS 源站：CDN 缓存中的图片默认仍可通过资源 URL 公开访问。已在浏览器显示的图片无法保证用户不能保存或截图；如需限制未授权访问，应另行设计 CDN URL 鉴权，且不得把不能保存当作其安全保证。
 
@@ -29,6 +29,8 @@
 | `OSS_PUBLIC_BASE_URL` | 已验证可通过 CDN 读取的 HTTPS 资源域名 `https://assets.yysjzx.com`，不带尾部斜杠 |
 
 环境变量变更只对新部署生效。请在设置后重新部署，并先在预览环境验证登录、读写与上传。
+
+暂缓 HTTPS 期间不要将 `OSS_PUBLIC_BASE_URL` 指向 `http://assets.yysjzx.com`，也不要删除 Pages 上的原有图片。上传函数要求 HTTPS 地址；官网 HTTPS 页面从 HTTP 图片域名加载资源会被浏览器拦截。
 
 ## 4. 迁移现有资源
 
