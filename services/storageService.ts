@@ -46,6 +46,16 @@ import {
 } from '../types';
 import { createAuditLogEntry } from '../utils/security';
 import JSZip from 'jszip';
+import { assetUrl } from '../utils/assetUrl';
+
+function withAssetUrls<T>(value: T): T {
+  if (typeof value === 'string') return assetUrl(value) as T;
+  if (Array.isArray(value)) return value.map(withAssetUrls) as T;
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, withAssetUrls(item)])) as T;
+  }
+  return value;
+}
 
 const KEYS = {
   NEWS: 'yanyun_news_v4',
@@ -100,15 +110,18 @@ const INITIAL_DATA_MAP: Record<string, any> = {
 
 // Using relative path to allow Nginx to proxy
 const API_ENDPOINT = '/api/kv';
-// 媒体上传走 Node.js 云函数直传腾讯云 COS（cloud-functions/api/upload.js）
+// 媒体上传走 Node.js 云函数直传阿里云 OSS
 const FILE_API_ENDPOINT = '/api/upload';
-// 旧图读取仍由 edge-functions/api/file.js 从 KV 提供，保持向后兼容；
-// 若 /api/upload 尚未部署（404/405），上传自动回退到该端点
-const LEGACY_FILE_API_ENDPOINT = '/api/file';
 const HEALTH_ENDPOINT = '/api/health';
-const KV_ACCESS_TOKEN = '8CG4Q0zhUzrvt14hsymoLNa+SJL9ioImlqabL5R+fJA=';
 
 let isCloudAvailable = false;
+let initialHealthCheck: Promise<void> | null = null;
+const ensureCloudChecked = () => {
+  if (!initialHealthCheck) {
+    initialHealthCheck = storageService.checkHealth().then(() => undefined);
+  }
+  return initialHealthCheck;
+};
 
 const markCloudUnavailable = (reason?: string) => {
   if (isCloudAvailable) {
@@ -137,21 +150,25 @@ export const storageService = {
                 window.dispatchEvent(new Event('storageStatusChanged'));
                 return { status: 'ok', message: '数据库连接正常，系统运行中。' };
             } else {
+                markCloudUnavailable('Health check returned an error');
                 return { status: 'error', message: `数据库连接失败: ${data.db_error}` };
             }
         } else {
+            markCloudUnavailable(`Health check HTTP ${response.status}`);
             return { status: 'error', message: `后端服务异常 (HTTP ${response.status})` };
         }
     } catch (e: any) {
+        markCloudUnavailable(e.message);
         return { status: 'error', message: `无法连接后端服务: ${e.message}` };
     }
   },
 
   async get<T>(key: string): Promise<T[]> {
+    await ensureCloudChecked();
     // 默认回退到本地数据
     const getFallback = () => {
         const local = localStorage.getItem(key);
-        return local ? JSON.parse(local) : (INITIAL_DATA_MAP[key] || []);
+        return withAssetUrls(local ? JSON.parse(local) : (INITIAL_DATA_MAP[key] || []));
     };
 
     if (!isCloudAvailable) return getFallback();
@@ -159,7 +176,7 @@ export const storageService = {
     try {
       const response = await fetch(`${API_ENDPOINT}?key=${key}&t=${Date.now()}`, { 
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${KV_ACCESS_TOKEN}` },
+        credentials: 'same-origin',
       });
       
       if (!response.ok) {
@@ -171,8 +188,9 @@ export const storageService = {
       if (data === null) return getFallback();
       
       // 更新本地缓存以备不时之需
-      localStorage.setItem(key, JSON.stringify(data));
-      return data;
+      const resolved = withAssetUrls(data);
+      localStorage.setItem(key, JSON.stringify(resolved));
+      return resolved;
     } catch (error: any) {
       markCloudUnavailable(`Network Error: ${error.message}`);
       return getFallback();
@@ -180,6 +198,7 @@ export const storageService = {
   },
 
   async save<T>(key: string, items: T[]): Promise<void> {
+    await ensureCloudChecked();
     // 1. 总是先存本地，保证 UI 响应快
     localStorage.setItem(key, JSON.stringify(items));
 
@@ -189,9 +208,9 @@ export const storageService = {
             const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${KV_ACCESS_TOKEN}`
+                    'Content-Type': 'application/json'
                 },
+                credentials: 'same-origin',
                 body: JSON.stringify({ key, value: items }),
             });
 
@@ -212,6 +231,7 @@ export const storageService = {
 
   // 核心：上传文件
   async uploadAsset(file: File): Promise<string> {
+    await ensureCloudChecked();
     // 严格模式：如果不在线，直接报错，不给转 Base64 的机会
     if (!isCloudAvailable) {
         throw new Error("服务器未连接，无法上传文件。请检查后端状态。");
@@ -221,22 +241,11 @@ export const storageService = {
         const formData = new FormData();
         formData.append('file', file);
 
-        const doUpload = (endpoint: string) =>
-            fetch(endpoint, {
+        const response = await fetch(FILE_API_ENDPOINT, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${KV_ACCESS_TOKEN}`
-                },
+                credentials: 'same-origin',
                 body: formData,
             });
-
-        let response = await doUpload(FILE_API_ENDPOINT);
-
-        // COS 上传端点尚未部署时（路由未生效返回 404/405），回退到旧的 KV 上传端点
-        if (response.status === 404 || response.status === 405) {
-            console.warn(`[Storage] ${FILE_API_ENDPOINT} 不可用(${response.status})，回退到 ${LEGACY_FILE_API_ENDPOINT}`);
-            response = await doUpload(LEGACY_FILE_API_ENDPOINT);
-        }
 
         if (!response.ok) {
             const errText = await response.text();
@@ -244,8 +253,7 @@ export const storageService = {
         }
         
         const res = await response.json();
-        // 返回 COS 公网地址，例如
-        // https://yanyun-1468935338.cos.ap-shanghai.myqcloud.com/media/20260917/xxx.jpg
+        // 返回已绑定的 OSS 资源域名地址
         return res.url; 
     } catch (error: any) {
         console.error("Upload Asset Error", error);
@@ -337,41 +345,43 @@ export const storageService = {
   getAuditLogs: () => storageService.get<AuditLog>(KEYS.AUDIT_LOGS),
 
   login: async (u: string, p: string): Promise<{ success: boolean; message?: string; mfaRequired?: boolean }> => {
-    if (u === 'admin' && p === 'admin') {
-      const users = await storageService.getUsers();
-      const user = users.find(usr => usr.username === 'admin') || INITIAL_USERS[0];
-      const securityConfig = await storageService.getSecurityConfig();
-
-      if (user.mfaEnabled || securityConfig.mfaEnabled) {
-        return { success: true, mfaRequired: true };
-      }
-
-      sessionStorage.setItem(KEYS.AUTH_TOKEN, 'session_' + Date.now());
+    try {
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p }),
+      });
+      const result = await response.json();
+      if (!response.ok) return { success: false, message: result.error || '登录失败' };
+      const user = { ...INITIAL_USERS[0], username: result.username, name: result.username };
+      sessionStorage.setItem(KEYS.AUTH_TOKEN, 'active');
       localStorage.setItem(KEYS.CURRENT_USER, JSON.stringify(user));
-      storageService.logAction('LOGIN', 'Auth', `Admin logged in`, 'SUCCESS');
       return { success: true, mfaRequired: false };
+    } catch {
+      return { success: false, message: '登录服务暂时不可用' };
     }
-    return { success: false, message: '凭证无效', mfaRequired: false };
   },
 
   verifyMfa: async (username: string, code: string): Promise<{ success: boolean; message?: string }> => {
-    if (code === '123456') {
-      const users = await storageService.getUsers();
-      const user = users.find(u => u.username === username) || INITIAL_USERS[0];
-      sessionStorage.setItem(KEYS.AUTH_TOKEN, 'session_' + Date.now());
-      localStorage.setItem(KEYS.CURRENT_USER, JSON.stringify(user));
-      storageService.logAction('LOGIN', 'Auth', `${user.name} verified MFA`, 'SUCCESS');
-      return { success: true };
-    }
-    return { success: false, message: '验证码无效' };
+    return { success: false, message: '当前未启用动态验证码，请使用账号密码登录' };
   },
 
   logout: () => {
+    void fetch('/api/auth?action=logout', { method: 'POST', credentials: 'same-origin' });
     sessionStorage.removeItem(KEYS.AUTH_TOKEN);
     localStorage.removeItem(KEYS.CURRENT_USER);
   },
 
   isAuthenticated: () => !!sessionStorage.getItem(KEYS.AUTH_TOKEN),
+  checkSession: async (): Promise<boolean> => {
+    try {
+      const response = await fetch('/api/auth', { credentials: 'same-origin', cache: 'no-store' });
+      if (!response.ok) return false;
+      const result = await response.json();
+      return result.authenticated === true;
+    } catch { return false; }
+  },
   getCurrentUser: (): User | null => {
     const u = localStorage.getItem(KEYS.CURRENT_USER);
     return u ? JSON.parse(u) : null;
@@ -404,7 +414,7 @@ export const storageService = {
   },
   getSettingsSync: (): SiteSettings => {
      const s = localStorage.getItem(KEYS.SETTINGS);
-     return s ? JSON.parse(s) : DEFAULT_SITE_SETTINGS;
+     return withAssetUrls(s ? JSON.parse(s) : DEFAULT_SITE_SETTINGS);
   },
   saveSettings: async (s: SiteSettings) => {
     await storageService.save(KEYS.SETTINGS, [s] as any);
@@ -413,7 +423,7 @@ export const storageService = {
 
   getPageContent: (): PageContent => {
     const c = localStorage.getItem(KEYS.PAGE_CONTENT);
-    return c ? JSON.parse(c) : INITIAL_PAGE_CONTENT;
+    return withAssetUrls(c ? JSON.parse(c) : INITIAL_PAGE_CONTENT);
   },
   savePageContent: (c: PageContent) => storageService.save(KEYS.PAGE_CONTENT, c as any),
 
@@ -436,6 +446,8 @@ export const storageService = {
     { id: 'site', name: '站点', count: 0 },
     { id: 'news', name: '新闻', count: 0 },
     { id: 'project', name: '项目', count: 0 },
+    { id: 'honor', name: '资质荣誉', count: 0 },
+    { id: 'document', name: '文件资料', count: 0 },
   ],
   getBranches: () => storageService.get<Branch>(KEYS.BRANCHES),
   saveBranches: (items: Branch[]) => storageService.save(KEYS.BRANCHES, items),

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Search, Plus, Trash2, Filter, Image as ImageIcon, Video, Link as LinkIcon, Copy, Check, FolderOpen, Upload, Grid, List as ListIcon, X, CheckCircle2, Loader2, AlertTriangle } from 'lucide-react';
+import { Search, Plus, Trash2, FileText, Image as ImageIcon, Video, Link as LinkIcon, Check, FolderOpen, Upload, Grid, List as ListIcon, X, CheckCircle2, Loader2, AlertTriangle } from 'lucide-react';
 import { storageService } from '../services/storageService';
 import { MediaItem, MediaCategory } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,14 +11,14 @@ const MotionDiv = motion.div as any;
 interface MediaLibraryProps {
   mode?: 'manage' | 'select';
   onSelect?: (url: string) => void;
-  allowedTypes?: ('image' | 'video')[];
+  allowedTypes?: MediaItem['type'][];
   initialCategory?: string;
 }
 
 const MediaLibrary: React.FC<MediaLibraryProps> = ({ 
   mode = 'manage', 
   onSelect, 
-  allowedTypes = ['image', 'video'],
+  allowedTypes = ['image', 'video', 'document'],
   initialCategory = 'all'
 }) => {
   const [media, setMedia] = useState<MediaItem[]>([]);
@@ -30,11 +30,12 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState('');
 
   // Upload Form State
   const [uploadForm, setUploadForm] = useState({
     name: '',
-    type: 'image' as 'image' | 'video',
+    type: 'image' as MediaItem['type'],
     category: 'site',
     url: '',
     file: null as File | null // Store raw file object
@@ -73,7 +74,7 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (window.confirm('确定要删除此资源吗？')) {
+    if (window.confirm('确定从媒体库移除此记录吗？对象存储中的原文件仍会保留。')) {
       const updated = media.filter(m => m.id !== id);
       await storageService.saveMedia(updated);
       loadData();
@@ -98,35 +99,38 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    // Use FileReader just for preview
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setUploadForm(prev => ({ 
-          ...prev, 
-          url: event.target?.result as string, // Preview URL (Base64)
-          name: prev.name || file.name.split('.')[0],
-          file: file // Store actual file for upload
+    setUploadError('');
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError('文件不能超过 5 MB');
+      return;
+    }
+    const expected = uploadForm.type === 'document' ? 'application/pdf' : uploadForm.type + '/';
+    if (!(uploadForm.type === 'document' ? file.type === expected : file.type.startsWith(expected))) {
+      setUploadError('所选文件与素材类型不匹配');
+      return;
+    }
+    if (uploadForm.type === 'image') {
+      const reader = new FileReader();
+      reader.onload = event => setUploadForm(prev => ({
+        ...prev, url: event.target?.result as string, name: prev.name || file.name.replace(/\.[^.]+$/, ''), file,
       }));
-    };
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+    } else {
+      setUploadForm(prev => ({ ...prev, url: '', name: prev.name || file.name.replace(/\.[^.]+$/, ''), file }));
+    }
   };
 
   const handleUploadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!uploadForm.url && !uploadForm.file) {
-      alert("请先选择图片或输入视频链接");
+    if (!uploadForm.file) {
+      setUploadError('请先选择文件');
       return;
     }
 
+    setUploadError('');
     setIsUploading(true);
     try {
-      let finalUrl = uploadForm.url;
-
-      // If it's an image file upload, upload to cloud KV first
-      if (uploadForm.type === 'image' && uploadForm.file) {
-         finalUrl = await storageService.uploadAsset(uploadForm.file);
-      }
+      const finalUrl = await storageService.uploadAsset(uploadForm.file);
 
       const newItem: MediaItem = {
         id: Date.now().toString(),
@@ -151,7 +155,7 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
         onSelect(newItem.url);
       }
     } catch (err: any) {
-      alert(`上传失败: ${err.message}`);
+      setUploadError(err.message || '上传失败，请重试');
     } finally {
       setIsUploading(false);
     }
@@ -178,6 +182,7 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
+              aria-current={activeCategory === cat.id ? 'true' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
                 activeCategory === cat.id 
                   ? 'bg-primary text-white font-bold' 
@@ -263,9 +268,13 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
                           className="w-full h-full object-cover" 
                           loading="lazy"
                         />
-                      ) : (
+                      ) : item.type === 'video' ? (
                         <div className="w-full h-full flex items-center justify-center bg-gray-900 text-white">
                           <Video size={32} />
+                        </div>
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-rose-50 text-rose-700">
+                          <FileText size={32} /><span className="text-xs font-semibold">PDF 文件</span>
                         </div>
                       )}
 
@@ -289,7 +298,7 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
                           <button 
                             onClick={(e) => handleDelete(item.id, e)}
                             className="p-2 bg-white rounded-full text-gray-700 hover:text-red-600 transition-colors"
-                            title="删除"
+                            title="从媒体库移除"
                           >
                             <Trash2 size={18} />
                           </button>
@@ -322,10 +331,12 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
                               loading="lazy"
                               alt={item.name}
                             />
-                          ) : (
+                          ) : item.type === 'video' ? (
                             <div className="w-full h-full bg-gray-900 flex items-center justify-center text-white">
                               <Video size={20}/>
                             </div>
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-rose-50 text-rose-700"><FileText size={20}/></div>
                           )}
                           {isLocal && (
                             <div className="absolute bottom-0 left-0 right-0 bg-amber-500 h-1" title="仅存储于本地，未上云"></div>
@@ -342,7 +353,7 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
                           {mode === 'manage' && (
                              <>
                                 <button onClick={(e) => handleCopy(item.url, item.id, e)} className="p-2 text-gray-400 hover:text-primary"><LinkIcon size={16}/></button>
-                                <button onClick={(e) => handleDelete(item.id, e)} className="p-2 text-gray-400 hover:text-red-500"><Trash2 size={16}/></button>
+                                <button onClick={(e) => handleDelete(item.id, e)} className="p-2 text-gray-400 hover:text-red-500" title="从媒体库移除"><Trash2 size={16}/></button>
                              </>
                           )}
                           {selectedId === item.id && <Check className="text-primary" size={20} />}
@@ -412,10 +423,15 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
                         disabled={isUploading}
                         className="w-full px-3 py-2 border rounded-lg bg-white outline-none disabled:bg-gray-50"
                         value={uploadForm.type}
-                        onChange={e => setUploadForm({...uploadForm, type: e.target.value as any})}
+                        onChange={e => {
+                          const type = e.target.value as MediaItem['type'];
+                          setUploadError('');
+                          setUploadForm(prev => ({ ...prev, type, file: null, url: '', category: type === 'document' ? 'document' : 'site' }));
+                        }}
                       >
                          <option value="image">图片</option>
-                         <option value="video">视频 (外部链接)</option>
+                         <option value="video">视频文件</option>
+                         <option value="document">PDF 文件</option>
                       </select>
                     </div>
                     <div>
@@ -431,57 +447,22 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({
                     </div>
                  </div>
 
-                 {uploadForm.type === 'image' ? (
-                    <div>
-                       <label className="block text-sm font-bold text-gray-700 mb-2">选择文件</label>
-                       <div 
-                         onClick={triggerFileSelect}
-                         className={`border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-colors ${
-                           isUploading ? 'bg-gray-50 cursor-not-allowed' : 'hover:bg-gray-50'
-                         }`}
-                       >
-                          {uploadForm.url ? (
-                            <img src={uploadForm.url} className="h-32 w-full object-contain mb-2" alt="upload-preview" />
-                          ) : isUploading ? (
-                            <Loader2 className="text-primary animate-spin mb-2" size={32} />
-                          ) : (
-                            <Upload className="text-gray-300 mb-2" size={32} />
-                          )}
-                          <p className="text-sm font-medium text-gray-600">
-                             {isUploading ? '正在上传到云端KV...' : uploadForm.url ? '点击更换文件' : '点击选择图片'}
-                          </p>
-                       </div>
-                       <input 
-                          type="file" 
-                          ref={fileInputRef} 
-                          onChange={handleFileChange} 
-                          className="hidden" 
-                          accept="image/*" 
-                       />
-                    </div>
-                 ) : (
-                    <div>
-                       <label className="block text-sm font-bold text-gray-700 mb-1">视频 URL</label>
-                       <div className="relative">
-                          <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                          <input 
-                            type="text" 
-                            required 
-                            disabled={isUploading}
-                            className="w-full pl-10 pr-4 py-2 border rounded-lg outline-none disabled:bg-gray-50" 
-                            value={uploadForm.url} 
-                            onChange={e => setUploadForm({...uploadForm, url: e.target.value})}
-                            placeholder="https://..."
-                          />
-                       </div>
-                    </div>
-                 )}
+                 <div>
+                   <label className="block text-sm font-bold text-gray-700 mb-2">选择文件</label>
+                   <button type="button" onClick={triggerFileSelect} disabled={isUploading} className="flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 p-8 text-center transition hover:border-primary hover:bg-blue-50/30 disabled:cursor-not-allowed disabled:opacity-60">
+                     {uploadForm.url && uploadForm.type === 'image' ? <img src={uploadForm.url} className="mb-3 h-32 w-full object-contain" alt="待上传图片预览" /> : isUploading ? <Loader2 className="mb-3 animate-spin text-primary" size={30} /> : <Upload className="mb-3 text-slate-400" size={30} />}
+                     <span className="text-sm font-medium text-slate-700">{isUploading ? '正在上传到阿里云 OSS…' : uploadForm.file ? uploadForm.file.name : '点击选择文件'}</span>
+                     <span className="mt-1 text-xs text-slate-400">支持 JPG、PNG、WEBP、GIF、PDF、MP4 等格式，单个文件不超过 5 MB</span>
+                   </button>
+                   <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept={uploadForm.type === 'image' ? 'image/jpeg,image/png,image/gif,image/webp,image/bmp,image/x-icon' : uploadForm.type === 'video' ? 'video/mp4,video/webm,video/quicktime' : 'application/pdf'} />
+                   {uploadError && <p role="alert" className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{uploadError}</p>}
+                 </div>
 
                  <div className="flex justify-end gap-3 mt-8">
                     <button type="button" disabled={isUploading} onClick={() => setIsUploadModalOpen(false)} className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">取消</button>
                     <button 
                       type="submit" 
-                      disabled={isUploading || !uploadForm.url}
+                      disabled={isUploading || !uploadForm.file}
                       className="px-8 py-2 bg-primary text-white rounded-lg font-bold shadow-lg hover:shadow-primary/30 transition-all flex items-center gap-2 disabled:bg-gray-400 disabled:shadow-none"
                     >
                       {isUploading && <Loader2 size={16} className="animate-spin" />}
