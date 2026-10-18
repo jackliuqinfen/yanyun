@@ -208,7 +208,7 @@ export interface MediaItem {
   id: string;
   name: string;
   url: string;
-  type: 'image' | 'video';
+  type: 'image' | 'video' | 'document';
   category: string;
   uploadDate: string;
   size?: string;

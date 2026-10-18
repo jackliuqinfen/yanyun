@@ -58,12 +58,13 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 // 鉴权中间件
-const EXPECTED_TOKEN = process.env.AUTH_TOKEN || '8CG4Q0zhUzrvt14hsymoLNa+SJL9ioImlqabL5R+fJA=';
+const EXPECTED_TOKEN = process.env.AUTH_TOKEN;
 const authenticate = (req, res, next) => {
     if (req.method === 'GET' && req.path === '/api/health') return next();
+    if (!EXPECTED_TOKEN) return res.status(503).json({ error: 'Authentication is not configured' });
     
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.includes(EXPECTED_TOKEN)) {
+    if (authHeader !== `Bearer ${EXPECTED_TOKEN}`) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
     next();

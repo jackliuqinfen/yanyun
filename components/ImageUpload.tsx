@@ -26,22 +26,22 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label = "上
     setError(null);
 
     // 1. Size Validation (Client Side)
-    // EdgeOne KV limits values (usually 10MB-25MB), keeping it under 5MB is safe for web assets
+    // 云函数请求体上限为 6 MB，文件本身控制在 5 MB 以内
     if (file.size > 5 * 1024 * 1024) {
       setError("图片过大，请上传 5MB 以内的图片");
       return;
     }
 
     // 2. Type Validation
-    if (!file.type.startsWith('image/')) {
-      setError("仅支持图片格式 (JPG, PNG, GIF, WEBP)");
+    if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/x-icon'].includes(file.type)) {
+      setError("仅支持 JPG、PNG、GIF、WEBP、BMP 和 ICO 图片");
       return;
     }
 
     setIsUploading(true);
 
     try {
-      // 3. Upload to Cloud KV (Object Storage Pattern)
+      // 3. 上传至阿里云 OSS
       const url = await storageService.uploadAsset(file);
       onChange(url); // Return the Cloud URL, not Base64
     } catch (err: any) {
@@ -122,7 +122,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label = "上
                   <ImageIcon size={24} />
                </div>
                <p className="text-sm font-medium text-gray-700">点击上传或拖拽图片</p>
-               <p className="text-xs text-gray-400 mt-1">自动存入 KV 云存储</p>
+               <p className="text-xs text-gray-400 mt-1">自动存入阿里云 OSS，单张不超过 5 MB</p>
              </>
           )}
           
@@ -140,7 +140,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label = "上
         type="file" 
         ref={fileInputRef} 
         onChange={handleFileChange} 
-        accept="image/*" 
+        accept="image/jpeg,image/png,image/gif,image/webp,image/bmp,image/x-icon"
         className="hidden" 
         disabled={isUploading}
       />

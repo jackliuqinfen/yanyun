@@ -5,13 +5,8 @@
  * 另修正：get(key, 'arrayBuffer') 第二个参数必须是字符串，不是 options 对象。
  */
 
-const TOKEN = '8CG4Q0zhUzrvt14hsymoLNa+SJL9ioImlqabL5R+fJA=';
-const MAX_FILE_BYTES = 25 * 1024 * 1024; // KV 单值上限
-
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Id',
+  'Access-Control-Allow-Methods': 'GET',
 };
 
 const MIME = {
@@ -48,10 +43,6 @@ function resolveKV(context) {
 export async function onRequest(context) {
   const { request } = context;
 
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
-
   const db = resolveKV(context);
   if (!db) {
     return json({ error: 'KV binding "YANYUN_DB" is not reachable at runtime.' }, 500);
@@ -78,24 +69,6 @@ export async function onRequest(context) {
           'Cache-Control': 'public, max-age=86400',
         },
       });
-    }
-
-    // --- POST: 上传（需要鉴权） ---
-    if (request.method === 'POST') {
-      const authHeader = request.headers.get('Authorization');
-      if (!authHeader || !authHeader.includes(TOKEN)) {
-        return json({ error: 'Unauthorized' }, 401);
-      }
-      if (!key) return json({ error: 'Key is required' }, 400);
-      if (!validKey(key)) return json({ error: 'Invalid key' }, 400);
-
-      const fileData = await request.arrayBuffer();
-      if (fileData.byteLength > MAX_FILE_BYTES) {
-        return json({ error: 'File too large (max 25MB)' }, 413);
-      }
-
-      await db.put(key, fileData);
-      return json({ success: true, url: `/api/file?key=${key}` });
     }
 
     return new Response('Method not allowed', { status: 405, headers: corsHeaders });

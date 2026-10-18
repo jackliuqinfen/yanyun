@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Globe } from 'lucide-react';
+import { assetUrl } from '../utils/assetUrl';
 
 interface FaviconProps {
   domain: string;
@@ -13,7 +14,7 @@ const Favicon: React.FC<FaviconProps> = ({ domain, size = 128, className = "w-fu
   // 1. Try local cache (downloaded by fetch_favicons_v2.js)
   // Assuming the file is named as domain.png or domain.ico
   // We prioritize png as our script converts most to it
-  const localIcon = `/image/favicons/${domain}.png`;
+  const localIcon = assetUrl(`/image/favicons/${domain}.png`);
 
   const handleError = () => {
     setError(true);
