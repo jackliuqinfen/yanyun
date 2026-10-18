@@ -145,7 +145,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                    <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">Internal Systems</span>
                 </div>
                 
-                <a href="http://106.14.157.201:8088/login" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50/50 transition-colors group/item">
+                <a href="http://123.57.228.236:8088/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50/50 transition-colors group/item">
                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-primary flex items-center justify-center group-hover/item:bg-primary group-hover/item:text-white transition-all duration-300 shadow-sm">
                       <Briefcase size={14} />
                    </div>
@@ -306,7 +306,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                </div>
                {/* Mobile Internal Links */}
                <div className="grid grid-cols-2 gap-4 mt-6">
-                  <a href="http://106.14.157.201:8088/login" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-3 bg-blue-50 text-primary rounded-lg text-sm font-bold">
+                  <a href="http://123.57.228.236:8088/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-3 bg-blue-50 text-primary rounded-lg text-sm font-bold">
                      <Briefcase size={16} /> OA办公
                   </a>
                   <Link to="/admin/login" className="flex items-center justify-center gap-2 py-3 bg-gray-100 text-gray-700 rounded-lg text-sm font-bold">
